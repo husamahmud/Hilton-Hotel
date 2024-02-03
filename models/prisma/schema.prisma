@@ -41,6 +41,10 @@ model ADMIN {
   birthDate  DateTime
   phoneNum   DateTime
   isDeleted  Boolean  @default(false)
+
+  news        NEWS[]
+  contact     CONTACTUS[]
+  AppSettings AppSettings?
 }
 
 model USER {
@@ -154,4 +158,87 @@ model FAQS {
   question  String
   answer    String
   isDeleted Boolean @default(false)
+}
+
+model NEWS {
+  id      String @id @default(uuid())
+  adminId String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  subTitle    String
+  description String
+  images      String[]
+  isDeleted   Boolean  @default(false)
+
+  admin   ADMIN   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  replies REPLY[]
+}
+
+model REPLY {
+  id     String @id @default(uuid())
+  newsId String
+
+  fullName  String
+  email     String
+  comment   String
+  isDeleted Boolean @default(false)
+
+  news NEWS @relation(fields: [newsId], references: [id], onDelete: Cascade)
+}
+
+model CONTACTUS {
+  id      String @id @default(uuid())
+  adminId String
+
+  fullName    String
+  email       String
+  phoneNum    String
+  subject     String
+  description String
+  isDeleted   Boolean @default(false)
+  isRead      Boolean @default(false)
+
+  byAdmin ADMIN @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+// DashBoard
+
+model AppSettings {
+  id      String @id @default(uuid())
+  adminId String @unique
+
+  hotelName   String
+  logo        String
+  address     String
+  phoneNum    String
+  email       String
+  socialMedia Json
+
+  admin   ADMIN?          @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  sliders HOMESLIDERS[]
+  mainVid PROMOTIONVIDEO?
+}
+
+model HOMESLIDERS {
+  id      String @id @default(uuid())
+  adminId String
+
+  photo     String
+  header    String
+  paragraph String
+  isDeleted Boolean @default(false)
+
+  byAdmin AppSettings @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model PROMOTIONVIDEO {
+  id      String @id @default(uuid())
+  adminId String @unique
+
+  video       String
+  description String
+
+  byAdmin AppSettings @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
