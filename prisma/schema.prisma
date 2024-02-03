@@ -1,0 +1,157 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomTypes {
+  JUNIOR_SUITE
+  FAMILY_ROOM
+  DOUBLE_ROOM
+  DELAUX_ROOM
+  SUPERIOR_ROOM
+}
+
+enum MenuTypes {
+  STARTERS
+  MAINS
+  SALADS
+  WINE
+}
+
+enum clubhouseTypes {
+  SPA
+  GYM
+  HEALTHCLUB
+}
+
+model ADMIN {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fullName   String
+  email      String   @unique
+  password   String
+  profilePic String?
+  birthDate  DateTime
+  phoneNum   DateTime
+  isDeleted  Boolean  @default(false)
+}
+
+model USER {
+  id String @id @default(uuid())
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fName      String
+  lName      String
+  email      String   @unique
+  password   String
+  profilePic String?
+  birthDate  DateTime
+  country    String
+  nationalID String   @unique
+  isBlocked  Boolean  @default(false)
+  isDelted   Boolean  @default(false)
+
+  room       ROOM[]
+  review     REVIEW?
+  restaurant RESTAURANT[]
+  menu       MENU[]
+  clubHouse  CLUBHOUSE[]
+}
+
+model ROOM {
+  id     String @id @default(uuid())
+  userId String
+
+  roomNum     String
+  checkIn     DateTime
+  checkOut    DateTime
+  types       RoomTypes @default(JUNIOR_SUITE)
+  price       String
+  description String
+  aminities   String[]
+  images      String[]
+  adults      Int
+  children    Int
+  view        String
+  isReserved  Boolean   @default(false)
+  isDeleted   Boolean   @default(false)
+
+  user          USER            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ExtraServices ExtraServices[]
+}
+
+model ExtraServices {
+  id     String @id @default(uuid())
+  roomId String
+
+  name       String
+  price      String
+  facilities String[]
+  isDeleted  Boolean  @default(false)
+
+  room ROOM @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model REVIEW {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  rating    Float
+  comment   String
+  isDeleted Boolean @default(false)
+
+  user USER @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RESTAURANT {
+  id     String @id @default(uuid())
+  userId String
+
+  description String
+
+  user USER   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  menu MENU[]
+}
+
+model MENU {
+  id           String @id @default(uuid())
+  userId       String
+  restaurantId String
+
+  menuTypes   MenuTypes
+  name        String
+  ingredients String
+  price       String
+  isDeleted   Boolean   @default(false)
+
+  user       USER       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant RESTAURANT @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model CLUBHOUSE {
+  id     String @id @default(uuid())
+  userId String
+
+  clubhouseTypes clubhouseTypes
+  description    String
+  startTime      DateTime
+  endTime        DateTime
+  isDeleted      Boolean        @default(false)
+
+  user USER @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FAQS {
+  id        String  @id @default(uuid())
+  question  String
+  answer    String
+  isDeleted Boolean @default(false)
+}
