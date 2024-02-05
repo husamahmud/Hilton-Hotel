@@ -30,8 +30,14 @@ enum clubhouseTypes {
   HEALTHCLUB
 }
 
-model ADMIN {
-  id         String   @id @default(uuid())
+enum ROLE {
+  USER
+  ADMIN
+}
+
+model Admin {
+  id String @id @default(uuid())
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   fullName   String
@@ -39,21 +45,23 @@ model ADMIN {
   password   String
   profilePic String?
   birthDate  DateTime
-  phoneNum   DateTime
+  phoneNum   String   @unique
   isDeleted  Boolean  @default(false)
+  role       ROLE     @default(ADMIN)
 
-  news        NEWS[]
-  contact     CONTACTUS[]
+  news        News[]
+  contact     ContactUs[]
   AppSettings AppSettings?
 }
 
-model USER {
+model User {
   id String @id @default(uuid())
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   fName      String
   lName      String
+  userName   String   @unique
   email      String   @unique
   password   String
   profilePic String?
@@ -62,15 +70,16 @@ model USER {
   nationalID String   @unique
   isBlocked  Boolean  @default(false)
   isDelted   Boolean  @default(false)
+  role       ROLE     @default(USER)
 
-  room       ROOM[]
-  review     REVIEW?
-  restaurant RESTAURANT[]
-  menu       MENU[]
-  clubHouse  CLUBHOUSE[]
+  room       Room[]
+  review     Review?
+  restaurant Restaurant[]
+  menu       Menu[]
+  clubHouse  ClubHouse[]
 }
 
-model ROOM {
+model Room {
   id     String @id @default(uuid())
   userId String
 
@@ -88,7 +97,7 @@ model ROOM {
   isReserved  Boolean   @default(false)
   isDeleted   Boolean   @default(false)
 
-  user          USER            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   ExtraServices ExtraServices[]
 }
 
@@ -101,10 +110,10 @@ model ExtraServices {
   facilities String[]
   isDeleted  Boolean  @default(false)
 
-  room ROOM @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
-model REVIEW {
+model Review {
   id     String @id @default(uuid())
   userId String @unique
 
@@ -112,20 +121,20 @@ model REVIEW {
   comment   String
   isDeleted Boolean @default(false)
 
-  user USER @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model RESTAURANT {
+model Restaurant {
   id     String @id @default(uuid())
   userId String
 
   description String
 
-  user USER   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  menu MENU[]
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  menu Menu[]
 }
 
-model MENU {
+model Menu {
   id           String @id @default(uuid())
   userId       String
   restaurantId String
@@ -136,11 +145,11 @@ model MENU {
   price       String
   isDeleted   Boolean   @default(false)
 
-  user       USER       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  restaurant RESTAURANT @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 }
 
-model CLUBHOUSE {
+model ClubHouse {
   id     String @id @default(uuid())
   userId String
 
@@ -150,7 +159,7 @@ model CLUBHOUSE {
   endTime        DateTime
   isDeleted      Boolean        @default(false)
 
-  user USER @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FAQS {
@@ -160,7 +169,7 @@ model FAQS {
   isDeleted Boolean @default(false)
 }
 
-model NEWS {
+model News {
   id      String @id @default(uuid())
   adminId String
 
@@ -172,11 +181,11 @@ model NEWS {
   images      String[]
   isDeleted   Boolean  @default(false)
 
-  admin   ADMIN   @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  replies REPLY[]
+  admin   Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  replies Reply[]
 }
 
-model REPLY {
+model Reply {
   id     String @id @default(uuid())
   newsId String
 
@@ -185,10 +194,10 @@ model REPLY {
   comment   String
   isDeleted Boolean @default(false)
 
-  news NEWS @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
 }
 
-model CONTACTUS {
+model ContactUs {
   id      String @id @default(uuid())
   adminId String
 
@@ -200,7 +209,7 @@ model CONTACTUS {
   isDeleted   Boolean @default(false)
   isRead      Boolean @default(false)
 
-  byAdmin ADMIN @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  byAdmin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 // DashBoard
@@ -216,12 +225,12 @@ model AppSettings {
   email       String
   socialMedia Json
 
-  admin   ADMIN?          @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  sliders HOMESLIDERS[]
-  mainVid PROMOTIONVIDEO?
+  admin   Admin?        @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  sliders HomeSliders[]
+  mainVid PromotionVid?
 }
 
-model HOMESLIDERS {
+model HomeSliders {
   id      String @id @default(uuid())
   adminId String
 
@@ -233,7 +242,7 @@ model HOMESLIDERS {
   byAdmin AppSettings @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
-model PROMOTIONVIDEO {
+model PromotionVid {
   id      String @id @default(uuid())
   adminId String @unique
 
