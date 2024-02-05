@@ -30,8 +30,14 @@ enum clubhouseTypes {
   HEALTHCLUB
 }
 
+enum ROLE {
+  USER
+  ADMIN
+}
+
 model ADMIN {
-  id         String   @id @default(uuid())
+  id String @id @default(uuid())
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   fullName   String
@@ -39,8 +45,9 @@ model ADMIN {
   password   String
   profilePic String?
   birthDate  DateTime
-  phoneNum   DateTime
+  phoneNum   DateTime @unique
   isDeleted  Boolean  @default(false)
+  role       ROLE     @default(ADMIN)
 
   news        NEWS[]
   contact     CONTACTUS[]
@@ -54,6 +61,7 @@ model USER {
   updatedAt  DateTime @updatedAt
   fName      String
   lName      String
+  userName   String   @unique
   email      String   @unique
   password   String
   profilePic String?
@@ -62,6 +70,7 @@ model USER {
   nationalID String   @unique
   isBlocked  Boolean  @default(false)
   isDelted   Boolean  @default(false)
+  role       ROLE     @default(USER)
 
   room       ROOM[]
   review     REVIEW?
