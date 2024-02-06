@@ -25,8 +25,12 @@ export class AdminController {
         .status(200)
         .json({ message: " Admin created Successfully ", data: admin });
     } catch (e) {
-      console.log(e);
-      return res.status(500).json({ error: e });
+
+      if (typeof e === 'object' && e.message && e.message.includes('Email')) {
+        return res.status(500).json({ error: 'Email is already in use!' });
+      } else {
+        return res.status(500).json({ error: e.message || 'Unknown error' });
+      }
     }
   };
 }
