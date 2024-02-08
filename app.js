@@ -23,3 +23,5 @@ app.use('/api/v1/admin', adminRouter)
 app.listen(process.env.PORT, () => {
 	console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });
+
+// http://localhost:3000/api/v1/admin

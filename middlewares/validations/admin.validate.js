@@ -17,6 +17,7 @@ export class AdminValidation {
 
 	static updateAdmin(adminDto) {
 		const schema = Joi.object({
+			id: Joi.string(),
 			fullName: Joi.string().min(6).max(80).trim(),
 			email: Joi.string().email().trim(),
 			password: Joi.string().min(8).max(25),
