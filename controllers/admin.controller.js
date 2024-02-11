@@ -11,6 +11,8 @@ export class AdminController {
     try {
       req.body.password = await hashPassword(req.body.password);
       req.body.birthDate = new Date(req.body.birthDate);
+      if (req.file) req.body.profilePic = req.file.path;
+
       const adminDto = new AdminDto(req.body);
       const adminDao = new AdminDao();
 

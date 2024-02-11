@@ -11,6 +11,7 @@ export class UserController {
       req.body.password = await hashPassword(req.body.password);
       req.body.birthDate = new Date(req.body.birthDate);
 
+      if (req.file) req.body.profilePic = req.file.path; // TODO If the photo exists
       const userDto = new UserDto(req.body);
       const userDao = new UserDao();
 
