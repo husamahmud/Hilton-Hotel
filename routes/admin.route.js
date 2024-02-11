@@ -15,4 +15,6 @@ router.route('/:adminId')
 router.route('/delete/:adminId')
 	.put(AdminController.softDeleteAdmin)
 	.delete(AdminController.hardDeleteAdmin)
+
+
 export default router

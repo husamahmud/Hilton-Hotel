@@ -13,6 +13,8 @@ export class AdminController {
         req.body.birthDate = new Date(req.body.birthDate);
         const adminDto = new AdminDto(req.body);
 
+        console.log('adminDto: ', adminDto);
+
         const adminDao = new AdminDao();
 
         const { error } = await AdminValidation.createAdmin(adminDto);

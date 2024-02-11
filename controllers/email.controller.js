@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import Joi from 'joi';
 import { createToken } from '../utilities/token.js';
 import prisma from '../models/prisma/prisma-client.js';
+import { AdminDao } from '../models/dao/admin.dao.js';
 
 
 export class EmailController {
@@ -100,7 +101,7 @@ export class EmailController {
         html: type === 'CONFIRM' ? `<div>
         <h2> Email Confirmation </h2>
         <h4>
-        Dear ${userObj.username} </h4>,
+        Dear ${userObj.userName} </h4>,
         <p> You have registered to our Hilton website!,
         We are glad to have you in our small family! please follow this link to
         confirm this email pleas <br>
@@ -128,4 +129,33 @@ export class EmailController {
     // => who i want to send to
 
   };
+
+  static AdminConfirmation = async (req, res) => {
+    const { adminId, token } = req.params
+    console.log('adminId :', adminId);
+    try {
+      const admin = await prisma.admin.findUnique({
+        where: {
+          id: adminId
+        }, include: {
+          ConfirmToken: true
+        }
+      })
+
+      if (!admin) throw new Error('Admin not found')
+      if (!admin.ConfirmToken) throw new Error('Token not found')
+      if (admin.ConfirmToken.expireAt < new Date()) throw new Error('Token has expired')
+      if (admin.ConfirmToken.token !== token) throw new Error('Token is not valid')
+      if (admin.emailConfirmed) throw new Error('Email is already confirmed')
+
+      const adminDao = new AdminDao()
+      const updatedAdmin = await adminDao.updateAdmin({ id: admin.id, emailConfirmed: true })
+
+      return res.status(200).json({ data: updatedAdmin, status: 'success' })
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).json({ error: error.message })
+    }
+  }
+
 }
