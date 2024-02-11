@@ -9,28 +9,31 @@ export class AdminController {
   // TODO node mailer
   static createAdmin = async (req, res) => {
     try {
-        req.body.password = await hashPassword(req.body.password);
-        req.body.birthDate = new Date(req.body.birthDate);
-        const adminDto = new AdminDto(req.body);
+      req.body.password = await hashPassword(req.body.password);
+      req.body.birthDate = new Date(req.body.birthDate);
+      const adminDto = new AdminDto(req.body);
 
-        console.log('adminDto: ', adminDto);
+      console.log('adminDto: ', adminDto);
 
-        const adminDao = new AdminDao();
+      const adminDao = new AdminDao();
 
-        const { error } = await AdminValidation.createAdmin(adminDto);
-        if (error) return res.status(400).json({ message: error.details[0].message });
+      const { error } = await AdminValidation.createAdmin(adminDto);
+      if (error) return res.status(400).json({ message: error.details[0].message });
 
-        const admin = await adminDao.createAdmin(adminDto);
+      const admin = await adminDao.createAdmin(adminDto);
 
-        await EmailController.sendEmailConfirmation(req, res);
+      await EmailController.sendEmailConfirmation(req, res);
 
-        return res.status(200).json({ message: 'Email Sent and Admin created Successfully ', data: admin });
+      return res.status(200).json({
+        message: 'Email Sent and Admin created Successfully ',
+        data: admin,
+      });
     } catch (e) {
       // console.log('error from create admin : ', e.message);
       return res.status(500).json({ error: e.message || 'Internal server error' });
 
     }
-};
+  };
 
 
   static getAllAdmins = async (req, res) => {
@@ -38,10 +41,12 @@ export class AdminController {
 
     try {
       const admins = await adminDao.getAllAdmins();
-
       return res
         .status(200)
-        .json({ message: 'Admins retrieved successfully', data: admins });
+        .json({
+          message: 'Admins retrieved successfully',
+          data: admins,
+        });
     } catch (e) {
       return res.status(500).json({ error: e.message || 'Eternal server error' });
     }
@@ -95,7 +100,6 @@ export class AdminController {
 
     try {
       const deletedAdmin = await adminDao.softDeleteAdmin(adminId);
-
       return res
         .status(200)
         .json({
@@ -118,7 +122,6 @@ export class AdminController {
 
     try {
       const deletedAdmin = await adminDao.hardDeleteAdmin(adminId);
-
       return res
         .status(200)
         .json({

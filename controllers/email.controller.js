@@ -6,14 +6,12 @@ import { AdminDao } from '../models/dao/admin.dao.js';
 
 
 export class EmailController {
-
   static sendEmailConfirmation = async (req, res) => {
     const email = req.body.email;
-    let user;
-
     const schema = Joi.object({
       email: Joi.string().email().required(),
     });
+    let user;
 
     try {
       const { error } = schema.validate({ email });
@@ -35,29 +33,21 @@ export class EmailController {
         });
         if (!user) return res.status(404).json({ error: 'User is not found' });
       }
-
       await this.sendEmail(user, 'CONFIRM');
-
-      // return res.status(200).json({ message: 'User Created and Email sent successfully', data: user });
-
     } catch (e) {
-      console.log('error from send confirmation mail : ', e.message);
+      console.error('error from send confirmation mail : ', e.message);
       return res.status(500).json({ error: 'Error from Send Email Confirmation!' });
     }
   };
 
 
   static sendEmail = async (userObj, type = 'CONFIRM' | 'RESET') => {
-    console.log('userObj : ', userObj);
     try {
       const token = createToken(userObj, '15m');
-      console.log('token   :', token);
-
       let confirmToken;
+
       if (type === 'CONFIRM') {
-        console.log('type from if  :', type);
         if (userObj.role === 'ADMIN') {
-          console.log('role from if  :' , userObj.role);
           confirmToken = await prisma.confirmToken.create({
             data: {
               token,
@@ -65,7 +55,6 @@ export class EmailController {
               expireAt: new Date(Date.now() + 15 * 60 * 1000),
             },
           });
-          console.log('confim zeft mn el if :', confirmToken);
         } else {
           confirmToken = await prisma.confirmToken.create({
             data: {
@@ -74,10 +63,8 @@ export class EmailController {
               expireAt: new Date(Date.now() + 15 * 60 * 1000),
             },
           });
-
         }
-        console.log('confirm token ', confirmToken);
-      } // TODO type === reset
+      } // TODO (type === 'CONFIRM')
 
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -90,72 +77,69 @@ export class EmailController {
       const url = type === 'CONFIRM' ?
         userObj.role === 'ADMIN' ?
           `http://localhost:3000/api/v1/auth/admin/email/${userObj.id}/${token}` :
-          `http://localhost:3000/api/v1/auth/user/email/${userObj.id}/${token}`
-        : ''; // TODO
-
+          `http://localhost:3000/api/v1/auth/user/email/${userObj.id}/${token}` :
+        ``; // TODO
 
       const info = await transporter.sendMail({
         from: process.env.APP_EMAIL,
         to: userObj.email,
         subject: type === 'CONFIRM' ? 'Email Confirmation' : 'Reset Password Confirmation',
-        html: type === 'CONFIRM' ? `<div>
-        <h2> Email Confirmation </h2>
-        <h4>
-        Dear ${userObj.userName} </h4>,
-        <p> You have registered to our Hilton website!,
-        We are glad to have you in our small family! please follow this link to
-        confirm this email pleas <br>
-        <b>if you haven't registered or think there's a mistake, please ignore this email</b> <br>
-        URL : ${url} <br> P.S.: this link is valid for 15mins once you receive it.</p>
-        </div>` : '', // TODO
+        html: type === 'CONFIRM' ?
+          `<div>
+            <h2> Email Confirmation </h2>
+            <h4>Dear ${userObj.userName}</h4>,
+            <p> 
+              Thank you for registering on our Hilton website! We are delighted to welcome you
+              to our small family. Please click on the following link to confirm your email:
+              <br>
+              <b>If you have not registered or believe this email was sent by mistake, please disregard it.</b> 
+              <br>
+              URL: ${url} 
+              <br>
+              Note: This link will be valid for 15 minutes from the time of receipt.
+            </p>
+          </div>` :
+          ``, // TODO
       });
 
-      transporter.sendMail(info, (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('email sent');
-        }
+      await transporter.sendMail(info, (err, data) => {
+        if (err) console.error(err);
       });
     } catch (e) {
       throw new Error('Error from Send Email', e.message);
     }
-
-    // confirmation
-    // token type
-    // reset password
-    // user / admin
-    // => type el email
-    // => who i want to send to
-
   };
 
   static AdminConfirmation = async (req, res) => {
-    const { adminId, token } = req.params
-    console.log('adminId :', adminId);
+    const { adminId, token } = req.params;
     try {
       const admin = await prisma.admin.findUnique({
         where: {
-          id: adminId
+          id: adminId,
         }, include: {
-          ConfirmToken: true
-        }
-      })
+          ConfirmToken: true,
+        },
+      });
 
-      if (!admin) throw new Error('Admin not found')
-      if (!admin.ConfirmToken) throw new Error('Token not found')
-      if (admin.ConfirmToken.expireAt < new Date()) throw new Error('Token has expired')
-      if (admin.ConfirmToken.token !== token) throw new Error('Token is not valid')
-      if (admin.emailConfirmed) throw new Error('Email is already confirmed')
+      if (!admin) throw new Error('Admin not found');
+      if (!admin.ConfirmToken) throw new Error('Token not found');
+      if (admin.ConfirmToken.expireAt < new Date()) throw new Error('Token has expired');
+      if (admin.ConfirmToken.token !== token) throw new Error('Token is not valid');
+      if (admin.emailConfirmed) throw new Error('Email is already confirmed');
 
-      const adminDao = new AdminDao()
-      const updatedAdmin = await adminDao.updateAdmin({ id: admin.id, emailConfirmed: true })
+      const adminDao = new AdminDao();
+      const updatedAdmin = await adminDao.updateAdmin({
+        id: admin.id,
+        emailConfirmed: true,
+      });
 
-      return res.status(200).json({ data: updatedAdmin, status: 'success' })
+      return res.status(200).json({
+        data: updatedAdmin,
+        status: 'Email confirmed successfully',
+      });
     } catch (error) {
-      console.log(error.message)
-      return res.status(500).json({ error: error.message })
+      console.error(error.message);
+      return res.status(500).json({ error: error.message });
     }
-  }
-
+  };
 }
