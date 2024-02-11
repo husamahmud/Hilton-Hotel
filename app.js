@@ -16,6 +16,9 @@ app.use('/api/v1/admin', adminRouter);
 import authRouter from './routes/auth.route.js';
 app.use('/api/v1/auth', authRouter);
 
+import userRoute from './routes/user.route.js';
+app.use('/api/v1/user', userRoute);
+
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });

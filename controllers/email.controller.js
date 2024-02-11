@@ -8,19 +8,25 @@ import { AdminDao } from '../models/dao/admin.dao.js';
 export class EmailController {
   static sendEmailConfirmation = async (req, res) => {
     const email = req.body.email;
-    const schema = Joi.object({
-      email: Joi.string().email().required(),
-    });
+    let schema;
     let user;
 
+    if (type === 'CREATE') {
+      schema = Joi.object({
+        email: Joi.string().email().required(),
+      });
+    }
+
     try {
-      const { error } = schema.validate({ email });
-      if (error) return res.status(400).json({ error: 'Email is not valid' });
+      if (type === 'CREATE') {
+        const { error } = schema.validate({ email });
+        if (error) return res.status(400).json({ error: 'Email is not valid' });
+      }
 
       user = await prisma.user.findUnique({
         where: {
           email: email,
-          isDelted: false,
+          isDeleted: false,
         },
       });
 
