@@ -24,7 +24,6 @@ export class UserDao {
       data: userDto,
     });
 
-    console.log(newUser);
     return newUser;
   };
 

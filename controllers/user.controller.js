@@ -2,6 +2,8 @@ import { UserDao } from '../models/dao/user.dao.js';
 import { UserDto } from '../models/dto/user.dto.js';
 import { UserValidate } from '../middlewares/validations/user.validate.js';
 import { hashPassword } from '../utilities/password.js';
+// import { EmailController } from './email.controller.js';
+import { EmailController } from './email.controller.js';
 
 export class UserController {
   static createUser = async (req, res) => {
@@ -16,7 +18,7 @@ export class UserController {
       if (error) return res.status(400).json({ message: error.details[0].message });
 
       const user = await userDao.createUser(userDto);
-      //TODO sendEmailConfirmation
+      await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
       return res.status(200).json({
         message: 'User created successfully',
