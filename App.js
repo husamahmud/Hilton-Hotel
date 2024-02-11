@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: false}));
 
 app.use('/', (req, res) => {
 	return res.json({
-		message: 'we are live'
+		message: 'we are live!'
 	});
 });
 
