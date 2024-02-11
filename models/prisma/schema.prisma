@@ -38,16 +38,18 @@ enum ROLE {
 model Admin {
   id String @id @default(uuid())
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  fullName   String
-  email      String   @unique
-  password   String
-  profilePic String?
-  birthDate  DateTime
-  phoneNum   String   @unique
-  isDeleted  Boolean  @default(false)
-  role       ROLE     @default(ADMIN)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  fullName       String
+  email          String   @unique
+  password       String
+  userName       String   @unique
+  profilePic     String?
+  birthDate      DateTime
+  phoneNum       String   @unique
+  isDeleted      Boolean  @default(false)
+  emailConfirmed Boolean  @default(false)
+  role           ROLE     @default(ADMIN)
 
   news         News[]
   contact      ContactUs[]
@@ -60,20 +62,21 @@ model Admin {
 model User {
   id String @id @default(uuid())
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  fName      String
-  lName      String
-  userName   String   @unique
-  email      String   @unique
-  password   String
-  profilePic String?
-  birthDate  DateTime
-  country    String
-  nationalID String   @unique
-  isBlocked  Boolean  @default(false)
-  isDelted   Boolean  @default(false)
-  role       ROLE     @default(USER)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  fName          String
+  lName          String
+  userName       String   @unique
+  email          String   @unique
+  password       String
+  profilePic     String?
+  birthDate      DateTime
+  country        String
+  nationalID     String   @unique
+  isBlocked      Boolean  @default(false)
+  isDelted       Boolean  @default(false)
+  emailConfirmed Boolean  @default(false)
+  role           ROLE     @default(USER)
 
   room         Room[]
   review       Review?
@@ -97,7 +100,7 @@ model ResetToken {
   user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
   admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
-  @@index([adminId, userId])
+  @@index([adminId, userId], name: "adminId_userId_Resetindex")
 }
 
 model ConfirmToken {
@@ -112,7 +115,7 @@ model ConfirmToken {
   user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
   admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
-  @@index([adminId, userId])
+  @@index([adminId, userId], name: "adminId_userId_Confrimindex")
 }
 
 model RefreshToken {
@@ -127,7 +130,7 @@ model RefreshToken {
   user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
   admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
-  @@index([adminId, userId])
+  @@index([adminId, userId], name: "adminId_userId_Refreshindex")
 }
 
 model Room {

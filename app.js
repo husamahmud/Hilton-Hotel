@@ -20,6 +20,9 @@ app.use(urlencoded({extended: false}));
 import adminRouter from './routes/admin.route.js';
 app.use('/api/v1/admin', adminRouter)
 
+import authRouter from './routes/auth.route.js';
+app.use('/api/v1/auth', authRouter)
+
 app.listen(process.env.PORT, () => {
 	console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });
