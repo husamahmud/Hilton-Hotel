@@ -1,0 +1,25 @@
+{
+		"semi": true,
+		"trailingComma": "all",
+		"singleQuote": true,
+		"printWidth": 120,
+		"tabWidth": 2,
+		"parser": "babel",
+		"bracketSpacing": true,
+		"arrowParens": "avoid",
+		"endOfLine": "lf",
+		"ignorePatterns": [
+				"node_modules/",
+				"public/"
+		],
+		"requirePragma": false,
+		"plugins": [
+				"prettier-plugin-react",
+				"prettier-plugin-jsdoc",
+				"prettier-plugin-serverless"
+		],
+		"jsdocConfig": {
+				"semi": true,
+				"singleQuote": true
+		}
+}

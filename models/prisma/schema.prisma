@@ -49,9 +49,12 @@ model Admin {
   isDeleted  Boolean  @default(false)
   role       ROLE     @default(ADMIN)
 
-  news        News[]
-  contact     ContactUs[]
-  AppSettings AppSettings?
+  news         News[]
+  contact      ContactUs[]
+  AppSettings  AppSettings?
+  ResetToken   ResetToken?
+  ConfirmToken ConfirmToken?
+  RefreshToken RefreshToken?
 }
 
 model User {
@@ -72,11 +75,59 @@ model User {
   isDelted   Boolean  @default(false)
   role       ROLE     @default(USER)
 
-  room       Room[]
-  review     Review?
-  restaurant Restaurant[]
-  menu       Menu[]
-  clubHouse  ClubHouse[]
+  room         Room[]
+  review       Review?
+  restaurant   Restaurant[]
+  menu         Menu[]
+  clubHouse    ClubHouse[]
+  ResetToken   ResetToken?
+  ConfirmToken ConfirmToken?
+  RefreshToken RefreshToken?
+}
+
+model ResetToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  token    String
+  userId   String?  @unique
+  adminId  String?  @unique
+  expireAt DateTime
+
+  user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, userId])
+}
+
+model ConfirmToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  token    String
+  userId   String?  @unique
+  adminId  String?  @unique
+  expireAt DateTime
+
+  user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, userId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  token    String
+  userId   String?  @unique
+  adminId  String?  @unique
+  expireAt DateTime
+
+  user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, userId])
 }
 
 model Room {
