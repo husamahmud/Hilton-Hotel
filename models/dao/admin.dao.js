@@ -24,9 +24,9 @@ export class AdminDao {
 	}
 
 	createAdmin = async (adminDto) => {
-		this.isExisted(adminDto.email)
+		await this.isExisted(adminDto.email)
 
-		this.isExisted(adminDto.phoneNum)
+		await this.isExisted(adminDto.phoneNum)
 
 		const newAdmin = await prisma.admin.create({
 			data: adminDto

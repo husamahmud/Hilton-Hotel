@@ -15,7 +15,7 @@ export class EmailController {
     });
 
     try {
-      const { error } = await schema.validate({ email });
+      const { error } = schema.validate({ email });
       if (error) return res.status(400).json({ error: 'Email is not valid' });
 
       user = await prisma.user.findUnique({
@@ -32,24 +32,24 @@ export class EmailController {
             isDeleted: false,
           },
         });
-        if (!user) return res.status(404).json({ error: 'Email is not found' });
-        //! admin
-        await this.sendEmail(user, 'CONFIRM');
-        res.status(200).json({ message: 'email sent', data: user });
+        if (!user) return res.status(404).json({ error: 'User is not found' });
       }
-      //! user
+
       await this.sendEmail(user, 'CONFIRM');
-      res.status(200).json({ message: 'email sent', data: user });
+
+      // return res.status(200).json({ message: 'User Created and Email sent successfully', data: user });
+
     } catch (e) {
       console.log('error from send confirmation mail : ', e.message);
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: 'Error from Send Email Confirmation!' });
     }
   };
+
 
   static sendEmail = async (userObj, type = 'CONFIRM' | 'RESET') => {
     console.log('userObj : ', userObj);
     try {
-      const token = await createToken(userObj, '15m');
+      const token = createToken(userObj, '15m');
       console.log('token   :', token);
 
       let confirmToken;
@@ -97,19 +97,19 @@ export class EmailController {
         from: process.env.APP_EMAIL,
         to: userObj.email,
         subject: type === 'CONFIRM' ? 'Email Confirmation' : 'Reset Password Confirmation',
-        html: type === 'CONFIRM' ? `<div> 
+        html: type === 'CONFIRM' ? `<div>
         <h2> Email Confirmation </h2>
         <h4>
-        Dear ${userObj.username} </h4>, 
-        <p> You have registered to our Hilton website!, 
+        Dear ${userObj.username} </h4>,
+        <p> You have registered to our Hilton website!,
         We are glad to have you in our small family! please follow this link to
         confirm this email pleas <br>
         <b>if you haven't registered or think there's a mistake, please ignore this email</b> <br>
-         URL : ${url} <br> P.S.: this link is valid for 15mins once you receive it.</p>
+        URL : ${url} <br> P.S.: this link is valid for 15mins once you receive it.</p>
         </div>` : '', // TODO
       });
 
-      await transporter.sendMail(info, (err, data) => {
+      transporter.sendMail(info, (err, data) => {
         if (err) {
           console.log(err);
         } else {
@@ -117,7 +117,7 @@ export class EmailController {
         }
       });
     } catch (e) {
-      throw new Error('Error from Send Email', e.details[0].message);
+      throw new Error('Error from Send Email', e.message);
     }
 
     // confirmation
@@ -129,16 +129,3 @@ export class EmailController {
 
   };
 }
-
-// async function main() {
-//   // send mail with defined transport object
-//   const info = await transporter.sendMail({
-//     from: '"Fred Foo 👻" <foo@example.com>', // sender address
-//     to: "bar@example.com, baz@example.com", // list of receivers
-//     subject: "Hello ✔", // Subject line
-//     text: "Hello world?", // plain text body
-//     html: "<b>Hello world?</b>", // html body
-//   });
-//
-//   console.log("Message sent: %s", info.messageId);
-// }

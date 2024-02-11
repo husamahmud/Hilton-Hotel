@@ -8,33 +8,28 @@ export class AdminController {
   // TODO multer
   // TODO node mailer
   static createAdmin = async (req, res) => {
-    // TODO confirmation email on create
-    req.body.password = await hashPassword(req.body.password);
-    req.body.birthDate = new Date(req.body.birthDate);
-    const adminDto = new AdminDto(req.body);
-
-    const adminDao = new AdminDao();
-
     try {
-      const { error } = await AdminValidation.createAdmin(adminDto);
-      if (error) return res.status(400).json({ message: error.details[0].message });
+        req.body.password = await hashPassword(req.body.password);
+        req.body.birthDate = new Date(req.body.birthDate);
+        const adminDto = new AdminDto(req.body);
 
-      const admin = await adminDao.createAdmin(adminDto);
+        const adminDao = new AdminDao();
 
-      await EmailController.sendEmailConfirmation(req, res)
-      return res
-        .status(200)
-        .json({ message: ' Admin created Successfully ', data: admin });
+        const { error } = await AdminValidation.createAdmin(adminDto);
+        if (error) return res.status(400).json({ message: error.details[0].message });
+
+        const admin = await adminDao.createAdmin(adminDto);
+
+        await EmailController.sendEmailConfirmation(req, res);
+
+        return res.status(200).json({ message: 'Email Sent and Admin created Successfully ', data: admin });
     } catch (e) {
-      if (typeof e === 'object' && e.message && e.message.includes('Email')) {
-        return res.status(500).json({ error: 'Email is already in use!' });
-      } else if (typeof e === 'object' && e.message && e.message.includes('Phone')) {
-        return res.status(500).json({ error: 'Phone number is already in use!' });
-      } else {
-        return res.status(500).json({ error: e.message || 'Eternal server error' });
-      }
+      // console.log('error from create admin : ', e.message);
+      return res.status(500).json({ error: e.message || 'Internal server error' });
+
     }
-  };
+};
+
 
   static getAllAdmins = async (req, res) => {
     const adminDao = new AdminDao();
