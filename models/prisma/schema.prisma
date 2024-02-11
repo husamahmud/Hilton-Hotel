@@ -43,7 +43,7 @@ model Admin {
   fullName       String
   email          String   @unique
   password       String
-  userName       String   @unique
+  username       String   @unique
   profilePic     String?
   birthDate      DateTime
   phoneNum       String   @unique
@@ -66,7 +66,7 @@ model User {
   updatedAt      DateTime @updatedAt
   fName          String
   lName          String
-  userName       String   @unique
+  username       String   @unique
   email          String   @unique
   password       String
   profilePic     String?
