@@ -40,18 +40,29 @@ export class UserDao {
   };
 
   updateUser = async (userDto) => {
-    if (userDto.email) await this.isExisted(userDto.email, 'email');
+    let updatedUser;
+    let updatedUserEmail;
+
+    if (userDto.email) {
+      await this.isExisted(userDto.email, 'email');
+      userDto.emailConfirmed = false;
+      updatedUserEmail = await prisma.user.update({
+        where: {
+          id: userDto.id,
+        }, data: userDto
+      });
+    }
     if (userDto.phoneNum) await this.isExisted(userDto.phoneNum, 'phoneNum');
     if (userDto.username) await this.isExisted(userDto.username, 'username');
     if (userDto.birthDate) userDto.birthDate = new Date(userDto.birthDate);
     if (userDto.password) userDto.password = await hashPassword(userDto.password);
 
-    const updatedUser = await prisma.user.update({
+    updatedUser = await prisma.user.update({
       where: {
         id: userDto.id,
       }, data: userDto,
     });
-    return updatedUser;
+    return updatedUser || updatedUserEmail;
   };
 
   softDeleteUser = async (userId) => {

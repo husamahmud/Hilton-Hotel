@@ -6,34 +6,45 @@ import { createToken } from '../utilities/token.js';
 export class EmailController {
   static sendEmailConfirmation = async (req, res, type) => {
     const email = req.body.email;
-    const schema = Joi.object({
-      email: Joi.string().email().required(),
-    });
-    const { error } = await schema.validate({ email });
-    if (error) return res.status(400).json({ error: 'Email is not valid' });
-
-    let userObj;
-    userObj = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    if (!userObj) {
-      userObj = await prisma.admin.findUnique({
-        where: {
-          email,
-        },
+    if (email) {
+      const schema = Joi.object({
+        email: Joi.string().email().required(),
       });
-      if (!userObj) return res.status(404).json({ error: 'Admin is not found' });
+      const { error } = await schema.validate({ email });
+      if (error) return res.status(400).json({ error: 'Email is not valid' });
+      var userObj;
+      if (!req.params.userId) {
+        userObj = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
+        if (!userObj) {
+          userObj = await prisma.admin.findUnique({
+            where: {
+              email,
+            },
+          });
+          if (!userObj) return res.status(404).json({ error: 'Admin is not found' });
+        }
+      }
+      if (req.params.userId) {
+        userObj = await prisma.user.findUnique({
+          where: {
+            id: req.params.userId,
+          },
+        });
+        if (!userObj) return res.status(400).json({ error: 'User is not found' });
+      }
     }
-
+    const userId = userObj.id;
     let token = createToken(userObj, '15m');
     if (type === 'CONFIRM') {
       if (userObj.role === 'ADMIN') {
         await prisma.confirmToken.create({
           data: {
             token,
-            adminId: userObj.id,
+            adminId: userId,
             expireAt: new Date(Date.now() + 15 * 60 * 1000),
           },
         });
@@ -41,7 +52,7 @@ export class EmailController {
         await prisma.confirmToken.create({
           data: {
             token,
-            userId: userObj.id,
+            userId: userId,
             expireAt: new Date(Date.now() + 15 * 60 * 1000),
           },
         });
@@ -51,7 +62,7 @@ export class EmailController {
         await prisma.resetToken.create({
           data: {
             token,
-            adminId: userObj.id,
+            adminId: userId,
             expireAt: new Date(Date.now() + 15 * 60 * 1000),
           },
         });
@@ -59,7 +70,7 @@ export class EmailController {
         await prisma.resetToken.create({
           data: {
             token,
-            userId: userObj.id,
+            userId: userId,
             expireAt: new Date(Date.now() + 15 * 60 * 1000),
           },
         });
@@ -73,7 +84,6 @@ export class EmailController {
     } else if (type === 'RESET') {
       endpoint = 'password/reset';
     }
-    const userId = userObj.id;
     let url = `${baseUrl}${endpoint}/${userId}/${token}`;
 
     try {
@@ -139,6 +149,12 @@ export class EmailController {
           id: userId,
         }, data: {
           emailConfirmed: true,
+        },
+      });
+
+      await prisma.confirmToken.delete({
+        where: {
+          userId,
         },
       });
 
