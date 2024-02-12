@@ -2,7 +2,6 @@ import { UserDao } from '../models/dao/user.dao.js';
 import { UserDto } from '../models/dto/user.dto.js';
 import { UserValidate } from '../middlewares/validations/user.validate.js';
 import { hashPassword } from '../utilities/password.js';
-// import { EmailController } from './email.controller.js';
 import { EmailController } from './email.controller.js';
 
 export class UserController {
@@ -28,6 +27,113 @@ export class UserController {
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: e.message || 'Internal server error' });
+    }
+  };
+
+  static getAllUsers = async (req, res) => {
+    const userDao = new UserDao();
+
+    try {
+      const users = await userDao.getAllUsers();
+      return res
+        .status(200)
+        .json({
+          message: 'Users retrieved successfully',
+          data: users,
+        });
+    } catch (e) {
+      return res.status(500).json({ error: e.message || 'Eternal server error' });
+    }
+  };
+
+  static getUserById = async (req, res) => {
+    const userDao = new UserDao();
+    try {
+      const user = await userDao.getUserById(req.params.userId);
+      return res
+        .status(200)
+        .json({
+          message: 'User retrieved successfully',
+          data: user,
+        });
+    } catch (e) {
+      if (typeof e === 'object' && e.message && e.message.includes('User')) {
+        return res
+          .status(404)
+          .json({ error: 'User not found' });
+      }
+    }
+  };
+
+  static updateUser = async (req, res) => {
+    const userDto = new UserDto(req.body);
+    userDto.id = req.params.userId;
+    const userDao = new UserDao();
+    try {
+      const { error } = await UserValidate.updateUser(userDto);
+      if (error) return res.status(400).json({ message: error.details[0].message });
+
+      const updatedUser = await userDao.updateUser(userDto);
+      if (req.body.email) await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
+
+      return res
+        .status(200)
+        .json({
+          message: 'User updated successfully',
+          data: updatedUser,
+        });
+    } catch (e) {
+      if (typeof e === 'object' && e.message && e.message.includes('Email')) {
+        return res.status(500).json({ error: 'Email is already in use!' });
+      } else if (typeof e === 'object' && e.message && e.message.includes('Phone')) {
+        return res.status(500).json({ error: 'Phone number is already in use!' });
+      } else {
+        return res.status(500).json({ error: e.message || 'Eternal server error' });
+      }
+    }
+  };
+
+  static softDeleteUser = async (req, res) => {
+    const userId = req.params.userId;
+    const userDao = new UserDao();
+
+    try {
+      const deletedUser = await userDao.softDeleteUser(userId);
+      return res
+        .status(200)
+        .json({
+          message: 'User deleted (softly) Successfully',
+          data: deletedUser,
+        });
+    } catch (e) {
+      if (typeof e === 'object' && e.message && e.message.includes('User')) {
+        return res
+          .status(404)
+          .json({ error: 'User not found' });
+      }
+      return res.status(500).json({ error: e.message || 'Eternal server error' });
+    }
+  };
+
+  static hardDeleteUser = async (req, res) => {
+    const userId = req.params.userId;
+    const userDao = new UserDao();
+
+    try {
+      const deletedUser = await userDao.hardDeleteUser(userId);
+      return res
+        .status(200)
+        .json({
+          message: 'User deleted permentaly Successfully',
+          data: deletedUser,
+        });
+    } catch (e) {
+      if (typeof e === 'object' && e.message && e.message.includes('User')) {
+        return res
+          .status(404)
+          .json({ error: 'User not found' });
+      }
+      return res.status(500).json({ error: e.message || 'Eternal server error' });
     }
   };
 }

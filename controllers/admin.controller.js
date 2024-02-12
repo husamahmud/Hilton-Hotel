@@ -74,7 +74,7 @@ export class AdminController {
       if (error) return res.status(400).json({ error: error.message });
 
       const updatedAdmin = await adminDao.updateAdmin(adminDto);
-      await EmailController.sendEmailConfirmation(req, res);
+      if (req.body.email) await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
       return res
         .status(200)
