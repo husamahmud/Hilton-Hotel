@@ -4,7 +4,7 @@ import upload from '../middlewares/upload.js';
 
 const router = express.Router();
 
-router.route('/')
-  .post(upload.single('profilePic'), UserController.createUser);
+// TODO: Add routes
+// router.route('/')
 
 export default router;

@@ -1,106 +1,89 @@
 import prisma from '../prisma/prisma-client.js';
 
 export class AdminDao {
-	isExisted = async (element) => {
-		let isExisted, searched;
-		if (element.includes('@')) {
-			searched = 'Email';
-			isExisted = await prisma.admin.findUnique({
-				where: {
-					email: element
-				}
-			})
-		} else {
-			searched = 'Phone number';
-			isExisted = await prisma.admin.findUnique({
-				where: {
-					phoneNum: element
-				}
-			})
-		}
-		if (isExisted) {
-			throw new Error(`${searched} is already in use!`)
-		}
-	}
+  isExisted = async (element, field) => {
+    let query;
+    if (field === 'email') query = { where: { email: element } };
+    else if (field === 'phoneNum') query = { where: { phoneNum: element } };
+    else if (field === 'username') query = { where: { username: element } };
 
-	createAdmin = async (adminDto) => {
-		await this.isExisted(adminDto.email)
+    const existingUser = await prisma.user.findUnique(query);
+    if (existingUser) {
+      throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone number'} is already in use!`);
+    }
+  };
 
-		await this.isExisted(adminDto.phoneNum)
+  createAdmin = async (adminDto) => {
+    await this.isExisted(adminDto.email);
+    await this.isExisted(adminDto.phoneNum);
 
-		const newAdmin = await prisma.admin.create({
-			data: adminDto
-		})
+    const newAdmin = await prisma.admin.create({
+      data: adminDto,
+    });
+    return newAdmin;
+  };
 
-		return newAdmin
-	}
+  getAllAdmins = async () => {
+    const admins = await prisma.admin.findMany({
+      where: {
+        isDeleted: false,
+      },
+    });
+    return admins;
+  };
 
-	getAllAdmins = async () => {
-		const admins = await prisma.admin.findMany({
-			where: {
-				isDeleted: false
-			}
-		})
+  getAdminById = async (adminId) => {
+    const admin = prisma.admin.findUnique({
+      where: {
+        id: adminId,
+        isDeleted: false,
+      },
+    });
+    if (!admin) throw new Error('Admin is not found');
+    return admin;
+  };
 
-		return admins
-	}
+  updateAdmin = async (adminDto) => {
+    await this.getAdminById(adminDto.id);
+    if (adminDto.email) await this.isExisted(adminDto.email, 'email');
+    if (adminDto.phoneNum) await this.isExisted(adminDto.phoneNum, 'phoneNum');
+    if (adminDto.birthDate) adminDto.birthDate = new Date(adminDto.birthDate);
+    if (adminDto.password) adminDto.password = await hashPassword(adminDto.password);
+    if (adminDto.username) await this.isExisted(adminDto.username, 'username');
 
-	getAdminById = async (adminId) => {
-		const admin = prisma.admin.findUnique({
-			where: {
-				id: adminId,
-				isDeleted: false
-			}
-		})
+    const updatedAdmin = await prisma.admin.update({
+      where: {
+        id: adminDto.id,
+        isDeleted: false,
+      },
+      data: adminDto,
+    });
 
-		if (!admin) {
-			throw new Error('Admin is not found')
-		}
+    return updatedAdmin;
+  };
 
-		return admin
-	}
+  softDeleteAdmin = async (adminId) => {
+    await this.getAdminById(adminId);
 
-	updateAdmin = async (adminDto) => {
-		await this.getAdminById(adminDto.id);
-		if (adminDto.email) await this.isExisted(adminDto.email);
-		if (adminDto.phoneNum) await this.isExisted(adminDto.phoneNum);
+    const deletedAdmin = await prisma.admin.update({
+      where: {
+        id: adminId,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
 
-		const updatedAdmin = await prisma.admin.update({
-			where: {
-				id: adminDto.id,
-				isDeleted: false
-			},
-			data: adminDto
-		})
+    return deletedAdmin;
+  };
 
-		return updatedAdmin
-	}
-
-	softDeleteAdmin = async (adminId) => {
-		await this.getAdminById(adminId)
-
-		const deletedAdmin = await prisma.admin.update({
-			where: {
-				id: adminId
-			},
-			data: {
-				isDeleted: true
-			}
-		})
-
-		return deletedAdmin
-	}
-
-	hardDeleteAdmin = async (adminId) => {
-
-		this.getAdminById(adminId)
-
-		const deletedAdmin = await prisma.admin.delete({
-			where: {
-				id: adminId
-			}
-		})
-
-		return deletedAdmin
-	}
+  hardDeleteAdmin = async (adminId) => {
+    this.getAdminById(adminId);
+    const deletedAdmin = await prisma.admin.delete({
+      where: {
+        id: adminId,
+      },
+    });
+    return deletedAdmin;
+  };
 }
