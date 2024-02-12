@@ -7,7 +7,7 @@ export class AdminDao {
     else if (field === 'phoneNum') query = { where: { phoneNum: element } };
     else if (field === 'username') query = { where: { username: element } };
 
-    const existingUser = await prisma.user.findUnique(query);
+    const existingUser = await prisma.admin.findUnique(query);
     if (existingUser) {
       throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone number'} is already in use!`);
     }
