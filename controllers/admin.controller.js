@@ -11,30 +11,24 @@ export class AdminController {
     try {
       req.body.password = await hashPassword(req.body.password);
       req.body.birthDate = new Date(req.body.birthDate);
+      if (req.file) req.body.profilePic = req.file.path;
+
       const adminDto = new AdminDto(req.body);
-
-      console.log('adminDto: ', adminDto);
-
       const adminDao = new AdminDao();
 
       const { error } = await AdminValidation.createAdmin(adminDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
       const admin = await adminDao.createAdmin(adminDto);
-
       await EmailController.sendEmailConfirmation(req, res);
 
       return res.status(200).json({
-        message: 'Email Sent and Admin created Successfully ',
-        data: admin,
+        message: 'Email Sent and Admin created Successfully ', data: admin,
       });
     } catch (e) {
-      // console.log('error from create admin : ', e.message);
       return res.status(500).json({ error: e.message || 'Internal server error' });
-
     }
   };
-
 
   static getAllAdmins = async (req, res) => {
     const adminDao = new AdminDao();
@@ -44,8 +38,7 @@ export class AdminController {
       return res
         .status(200)
         .json({
-          message: 'Admins retrieved successfully',
-          data: admins,
+          message: 'Admins retrieved successfully', data: admins,
         });
     } catch (e) {
       return res.status(500).json({ error: e.message || 'Eternal server error' });
@@ -79,7 +72,10 @@ export class AdminController {
     try {
       const { error } = await AdminValidation.updateAdmin(adminDto);
       if (error) return res.status(400).json({ error: error.message });
+
       const updatedAdmin = await adminDao.updateAdmin(adminDto);
+      if (req.body.email) await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
+
       return res
         .status(200)
         .json({ message: 'Admin updated successfully', data: updatedAdmin });
@@ -103,8 +99,7 @@ export class AdminController {
       return res
         .status(200)
         .json({
-          message: 'Admin deleted (softly) Successfully',
-          data: deletedAdmin,
+          message: 'Admin deleted (softly) Successfully', data: deletedAdmin,
         });
     } catch (e) {
       if (typeof e === 'object' && e.message && e.message.includes('Admin')) {
@@ -125,8 +120,7 @@ export class AdminController {
       return res
         .status(200)
         .json({
-          message: 'Admin deleted permentaly Successfully',
-          data: deletedAdmin,
+          message: 'Admin deleted permentaly Successfully', data: deletedAdmin,
         });
     } catch (e) {
       if (typeof e === 'object' && e.message && e.message.includes('Admin')) {

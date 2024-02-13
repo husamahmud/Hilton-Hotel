@@ -1,71 +1,92 @@
 import nodemailer from 'nodemailer';
 import Joi from 'joi';
-import { createToken } from '../utilities/token.js';
 import prisma from '../models/prisma/prisma-client.js';
-import { AdminDao } from '../models/dao/admin.dao.js';
-
+import { createToken } from '../utilities/token.js';
 
 export class EmailController {
-  static sendEmailConfirmation = async (req, res) => {
+  static sendEmailConfirmation = async (req, res, type) => {
     const email = req.body.email;
-    const schema = Joi.object({
-      email: Joi.string().email().required(),
-    });
-    let user;
-
-    try {
-      const { error } = schema.validate({ email });
-      if (error) return res.status(400).json({ error: 'Email is not valid' });
-
-      user = await prisma.user.findUnique({
-        where: {
-          email: email,
-          isDelted: false,
-        },
+    if (email) {
+      const schema = Joi.object({
+        email: Joi.string().email().required(),
       });
-
-      if (!user) {
-        user = await prisma.admin.findUnique({
+      const { error } = await schema.validate({ email });
+      if (error) return res.status(400).json({ error: 'Email is not valid' });
+      var userObj;
+      if (!req.params.userId) {
+        userObj = await prisma.user.findUnique({
           where: {
-            email: email,
-            isDeleted: false,
+            email,
           },
         });
-        if (!user) return res.status(404).json({ error: 'User is not found' });
-      }
-      await this.sendEmail(user, 'CONFIRM');
-    } catch (e) {
-      console.error('error from send confirmation mail : ', e.message);
-      return res.status(500).json({ error: 'Error from Send Email Confirmation!' });
-    }
-  };
-
-
-  static sendEmail = async (userObj, type = 'CONFIRM' | 'RESET') => {
-    try {
-      const token = createToken(userObj, '15m');
-      let confirmToken;
-
-      if (type === 'CONFIRM') {
-        if (userObj.role === 'ADMIN') {
-          confirmToken = await prisma.confirmToken.create({
-            data: {
-              token,
-              adminId: userObj.id,
-              expireAt: new Date(Date.now() + 15 * 60 * 1000),
+        if (!userObj) {
+          userObj = await prisma.admin.findUnique({
+            where: {
+              email,
             },
           });
-        } else {
-          confirmToken = await prisma.confirmToken.create({
-            data: {
-              token,
-              userId: userObj.id,
-              expireAt: new Date(Date.now() + 15 * 60 * 1000),
-            },
-          });
+          if (!userObj) return res.status(404).json({ error: 'Admin is not found' });
         }
-      } // TODO (type === 'CONFIRM')
+      }
+      if (req.params.userId) {
+        userObj = await prisma.user.findUnique({
+          where: {
+            id: req.params.userId,
+          },
+        });
+        if (!userObj) return res.status(400).json({ error: 'User is not found' });
+      }
+    }
+    const userId = userObj.id;
+    let token = createToken(userObj, '15m');
+    if (type === 'CONFIRM') {
+      if (userObj.role === 'ADMIN') {
+        await prisma.confirmToken.create({
+          data: {
+            token,
+            adminId: userId,
+            expireAt: new Date(Date.now() + 15 * 60 * 1000),
+          },
+        });
+      } else {
+        await prisma.confirmToken.create({
+          data: {
+            token,
+            userId: userId,
+            expireAt: new Date(Date.now() + 15 * 60 * 1000),
+          },
+        });
+      }
+    } else if (type === 'RESET') {
+      if (userObj.role === 'ADMIN') {
+        await prisma.resetToken.create({
+          data: {
+            token,
+            adminId: userId,
+            expireAt: new Date(Date.now() + 15 * 60 * 1000),
+          },
+        });
+      } else {
+        await prisma.resetToken.create({
+          data: {
+            token,
+            userId: userId,
+            expireAt: new Date(Date.now() + 15 * 60 * 1000),
+          },
+        });
+      }
+    }
 
+    let endpoint;
+    const baseUrl = 'http://localhost:3000/api/v1/auth/';
+    if (type === 'CONFIRM') {
+      if (userObj.role === 'ADMIN') endpoint = 'admin/email'; else endpoint = 'user/email';
+    } else if (type === 'RESET') {
+      endpoint = 'password/reset';
+    }
+    let url = `${baseUrl}${endpoint}/${userId}/${token}`;
+
+    try {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -73,40 +94,75 @@ export class EmailController {
           pass: process.env.APP_PASSWORD,
         },
       });
-
-      const url = type === 'CONFIRM' ?
-        userObj.role === 'ADMIN' ?
-          `http://localhost:3000/api/v1/auth/admin/email/${userObj.id}/${token}` :
-          `http://localhost:3000/api/v1/auth/user/email/${userObj.id}/${token}` :
-        ``; // TODO
-
       const info = await transporter.sendMail({
         from: process.env.APP_EMAIL,
         to: userObj.email,
         subject: type === 'CONFIRM' ? 'Email Confirmation' : 'Reset Password Confirmation',
         html: type === 'CONFIRM' ?
           `<div>
-            <h2> Email Confirmation </h2>
-            <h4>Dear ${userObj.userName}</h4>,
-            <p> 
+            <h4>Dear ${userObj.username}</h4>,
+            <p>
               Thank you for registering on our Hilton website! We are delighted to welcome you
               to our small family. Please click on the following link to confirm your email:
               <br>
-              <b>If you have not registered or believe this email was sent by mistake, please disregard it.</b> 
-              <br>
-              URL: ${url} 
+              URL: ${url}
               <br>
               Note: This link will be valid for 15 minutes from the time of receipt.
+              <br>
+              <b>If you have not registered or believe this email was sent by mistake, please disregard it.</b>
             </p>
           </div>` :
-          ``, // TODO
+          `<div>
+            <h4>Dear ${userObj.username}</h4>,
+            <p>
+              Hope This mail finds you will, You can Follow This Link to Reset Your Password:
+              <br>
+              URL: ${url}
+              <br>
+              Note: This link will be valid for 15 minutes from the time of receipt.
+              <br>
+              <b>If you have not asked for resetting password or believe this email was sent by mistake, please disregard it.</b>
+            </p>
+          </div>`,
+      });
+      console.log('Email sent successfully');
+    } catch (e) {
+      throw new Error('Error from Send Email' + e.message);
+    }
+  };
+
+  static UserConfirmation = async (req, res) => {
+    const { userId, token } = req.params;
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId }, include: { ConfirmToken: true },
       });
 
-      await transporter.sendMail(info, (err, data) => {
-        if (err) console.error(err);
+      if (!user) throw new Error('User is not found');
+      if (!user.ConfirmToken) throw new Error('Token not found');
+      if (user.ConfirmToken.expireAt < new Date()) throw new Error('Token has expired');
+      if (user.ConfirmToken.token !== token) throw new Error('Invalid token');
+      if (user.emailConfirmed) throw new Error('Email is already confirmed');
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        }, data: {
+          emailConfirmed: true,
+        },
+      });
+
+      await prisma.confirmToken.delete({
+        where: {
+          userId,
+        },
+      });
+
+      return res.status(200).json({
+        status: 'Email confirmed successfully', data: updatedUser,
       });
     } catch (e) {
-      throw new Error('Error from Send Email', e.message);
+      throw new Error('Error from UserConfirmation ' + e.message);
     }
   };
 
@@ -127,19 +183,20 @@ export class EmailController {
       if (admin.ConfirmToken.token !== token) throw new Error('Token is not valid');
       if (admin.emailConfirmed) throw new Error('Email is already confirmed');
 
-      const adminDao = new AdminDao();
-      const updatedAdmin = await adminDao.updateAdmin({
-        id: admin.id,
-        emailConfirmed: true,
+      const updatedAdmin = await prisma.admin.update({
+        where: {
+          id: adminId,
+        }, data: {
+          emailConfirmed: true,
+        },
       });
 
       return res.status(200).json({
-        data: updatedAdmin,
-        status: 'Email confirmed successfully',
+        data: updatedAdmin, status: 'Email confirmed successfully',
       });
     } catch (error) {
       console.error(error.message);
       return res.status(500).json({ error: error.message });
     }
   };
-}
+};
