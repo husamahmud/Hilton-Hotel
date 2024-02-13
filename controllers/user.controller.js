@@ -20,6 +20,12 @@ export class UserController {
       const user = await userDao.createUser(userDto);
       await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
+      req.user = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+      };
       return res.status(200).json({
         message: 'User created successfully',
         data: user,

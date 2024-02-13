@@ -6,6 +6,7 @@ import { AdminDao } from '../models/dao/admin.dao.js';
 import { UserDao } from '../models/dao/user.dao.js';
 import { createToken } from '../utilities/token.js';
 import { EmailController } from './email.controller.js';
+import { hashPassword } from '../utilities/password.js';
 
 export class AuthController {
   static login = async (req, res) => {
@@ -26,6 +27,12 @@ export class AuthController {
           },
         });
       }
+      req.user = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+      };
 
       return res.status(200).json({
         message: 'User Logged in successfully',
@@ -68,7 +75,6 @@ export class AuthController {
     const userDao = new UserDao();
     if (req.body.password !== req.body.confirmPassword) return res.status(400).json({ message: 'Passwords do not match' });
     try {
-
       const user = await userDao.getUserById(userId);
       if (!user) {
         let admin = await adminDao.findAdminById(userId);
@@ -85,9 +91,10 @@ export class AuthController {
         if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
         if (resetToken.token !== token) throw new Error('Invalid token');
 
+        const hashed = await hashPassword(req.body.password);
         const updatedUser = await userDao.updateUser({
           id: userId,
-          password: req.body.password,
+          password: hashed,
         });
 
         return res.status(200).json({
@@ -106,15 +113,48 @@ export class AuthController {
         if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
         if (resetToken.token !== token) throw new Error('Invalid token');
 
+        const hashed = await hashPassword(req.body.password);
         const updatedAdmin = await adminDao.updateAdmin({
           id: userId,
-          password: req.body.password,
+          password: hashed,
         });
         return res.status(200).json({
           message: 'Password updated successfully',
           data: updatedAdmin,
         });
       }
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ error: e.message || 'Internal server error' });
+    }
+  };
+
+  static chagnePassword = async (req, res) => {
+    // TODO add user to request
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.params.userId,
+        },
+      });
+      if (!user) return res.status(404).json({ message: 'User not found' });
+
+      if (req.body.password !== req.body.confirmPassword) return res.status(400).json({ message: 'Passwords do not match' });
+
+      const hashed = await hashPassword(req.body.password);
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: req.params.userId,
+        },
+        data: {
+          password: hashed,
+        },
+      });
+
+      return res.status(200).json({
+        message: 'Password updated successfully',
+        data: updatedUser,
+      });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: e.message || 'Internal server error' });

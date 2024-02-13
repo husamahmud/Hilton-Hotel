@@ -6,8 +6,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(UserController.getAllUsers)
-  .post(upload.single('profilePic'), UserController.createUser);
+  .get(UserController.getAllUsers);
 
 router
   .route('/:userId')

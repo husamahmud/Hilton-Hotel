@@ -29,6 +29,10 @@ router
   .route('/password/reset/:userId/:token')
   .post(AuthController.resetPassword);
 
+router
+  .route('/password/change/:userId')
+  .post(AuthController.chagnePassword);
+
 /** Email */
 router
   .route('/admin/email/:adminId/:token')

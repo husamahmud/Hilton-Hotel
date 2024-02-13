@@ -19,5 +19,4 @@ router
   .put(AdminController.softDeleteAdmin)
   .delete(AdminController.hardDeleteAdmin);
 
-
 export default router;
