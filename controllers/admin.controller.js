@@ -20,7 +20,7 @@ export class AdminController {
       if (error) return res.status(400).json({ message: error.details[0].message });
 
       const admin = await adminDao.createAdmin(adminDto);
-      await EmailController.sendEmailConfirmation(req, res);
+      await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
       return res.status(200).json({
         message: 'Email Sent and Admin created Successfully ', data: admin,

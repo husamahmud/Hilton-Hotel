@@ -1,21 +1,22 @@
 import prisma from '../prisma/prisma-client.js';
+import { UserDao } from './user.dao.js';
+
 
 export class AdminDao {
   isExisted = async (element, field) => {
     let query;
-    if (field === 'email') query = { where: { email: element } };
-    else if (field === 'phoneNum') query = { where: { phoneNum: element } };
-    else if (field === 'username') query = { where: { username: element } };
+    if (field === 'email') query = { where: { email: element } }; else if (field === 'phoneNum') query = { where: { phoneNum: element } }; else if (field === 'username') query = { where: { username: element } };
 
-    const existingUser = await prisma.admin.findUnique(query);
-    if (existingUser) {
+    const existingAdmin = await prisma.admin.findUnique(query);
+    if (existingAdmin) {
       throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone number'} is already in use!`);
     }
   };
 
   createAdmin = async (adminDto) => {
-    await this.isExisted(adminDto.email);
-    await this.isExisted(adminDto.phoneNum);
+    await this.isExisted(adminDto.email, 'email');
+    await this.isExisted(adminDto.phoneNum, 'phoneNum');
+    await this.isExisted(adminDto.username, 'username');
 
     const newAdmin = await prisma.admin.create({
       data: adminDto,
@@ -45,13 +46,27 @@ export class AdminDao {
 
   updateAdmin = async (adminDto) => {
     await this.getAdminById(adminDto.id);
-    if (adminDto.email) await this.isExisted(adminDto.email, 'email');
+    let updatedAdmin;
+    if (adminDto.email) {
+      await this.isExisted(adminDto.email, 'email');
+      await new UserDao().isExisted(adminDto.email, 'email');
+
+      adminDto.emailConfirmed = false;
+
+      updatedAdmin = await prisma.admin.update({
+        where: {
+          id: adminDto.id,
+          isDeleted: false,
+        },
+        data: adminDto,
+      });
+    }
     if (adminDto.phoneNum) await this.isExisted(adminDto.phoneNum, 'phoneNum');
     if (adminDto.birthDate) adminDto.birthDate = new Date(adminDto.birthDate);
     if (adminDto.password) adminDto.password = await hashPassword(adminDto.password);
     if (adminDto.username) await this.isExisted(adminDto.username, 'username');
 
-    const updatedAdmin = await prisma.admin.update({
+    updatedAdmin = await prisma.admin.update({
       where: {
         id: adminDto.id,
         isDeleted: false,

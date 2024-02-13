@@ -1,19 +1,23 @@
 import prisma from '../prisma/prisma-client.js';
 import { hashPassword } from '../../utilities/password.js';
+import { AdminDao } from './admin.dao.js';
 
 export class UserDao {
   isExisted = async (element, field) => {
     let query;
-    if (field === 'email') query = { where: { email: element } }; else if (field === 'phoneNum') query = { where: { phoneNum: element } }; else if (field === 'username') query = { where: { username: element } };
+    if (field === 'email') query = { where: { email: element } }; else if (field === 'nationalID') query = { where: { nationalID: element } }; else if (field === 'username') query = { where: { username: element } };
 
     const existingUser = await prisma.user.findUnique(query);
     if (existingUser) {
-      throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone number'} is already in use!`);
+      throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'National ID'} is already in use!`);
     }
   };
 
   createUser = async (userDto) => {
     await this.isExisted(userDto.email, 'email');
+    await this.isExisted(userDto.nationalID, 'nationalID');
+    await this.isExisted(userDto.username, 'username');
+
     const newUser = await prisma.user.create({
       data: userDto,
     });
@@ -45,13 +49,15 @@ export class UserDao {
 
     if (userDto.email) {
       await this.isExisted(userDto.email, 'email');
+      await new AdminDao().isExisted(userDto.email, 'email');
       userDto.emailConfirmed = false;
       updatedUserEmail = await prisma.user.update({
         where: {
           id: userDto.id,
-        }, data: userDto
+        }, data: userDto,
       });
     }
+
     if (userDto.phoneNum) await this.isExisted(userDto.phoneNum, 'phoneNum');
     if (userDto.username) await this.isExisted(userDto.username, 'username');
     if (userDto.birthDate) userDto.birthDate = new Date(userDto.birthDate);
