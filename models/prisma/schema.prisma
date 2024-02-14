@@ -78,7 +78,7 @@ model User {
   emailConfirmed Boolean  @default(false)
   role           ROLE     @default(USER)
 
-  room         Room[]
+  room         RoomReservation[]
   review       Review?
   restaurant   Restaurant[]
   menu         Menu[]
@@ -134,25 +134,42 @@ model RefreshToken {
 }
 
 model Room {
-  id     String @id @default(uuid())
-  userId String
+  id String @id @default(uuid())
 
-  roomNum     String
-  checkIn     DateTime
-  checkOut    DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  roomNum     String    @unique
   types       RoomTypes @default(JUNIOR_SUITE)
   price       String
   description String
   aminities   String[]
   images      String[]
-  adults      Int
-  children    Int
   view        String
   isReserved  Boolean   @default(false)
   isDeleted   Boolean   @default(false)
 
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ExtraServices ExtraServices[]
+  extraServices ExtraServices[]
+  user          RoomReservation[]
+}
+
+model RoomReservation {
+  id String @id @default(uuid())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  roomId    String
+  checkIn   DateTime
+  checkOut  DateTime
+  adults    Int
+  children  Int
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@unique([roomId, userId])
 }
 
 model ExtraServices {
