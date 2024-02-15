@@ -21,6 +21,9 @@ export class RoomDao {
         id: roomId,
         isDeleted: false,
       },
+      include: {
+        user: true,
+      },
     });
     if (!room) throw new Error('Room is not found');
     return room;
@@ -66,55 +69,7 @@ export class RoomDao {
     });
     return deletedRoom;
   };
-
-  /****************************************************************************/
-  createRoomReservation = async (roomReservationDto) => {
-    const roomReserved = await prisma.roomReservation.findMany({
-      where: {
-        roomId: roomReservationDto.roomId,
-        isDeleted: false,
-      },
-    });
-    if (roomReserved.length > 0) {
-      for (const reservation of roomReserved) {
-        const roomCheckIn = new Date(reservation.checkIn);
-        const roomCheckOut = new Date(reservation.checkOut);
-        if (room.isReserved === true &&
-          (roomCheckIn <= roomReservationDto.checkOut && roomCheckOut >= roomReservationDto.checkIn)) {
-          throw new Error('Room is already reserved');
-        }
-      }
-    }
-    const newReservedRoom = await prisma.roomReservation.create({
-      data: roomReservationDto,
-    });
-    return newReservedRoom;
-  };
-
-  // TODO validate roomReservationId
-
-  updateRoomReservation = async (roomReservationDto) => {
-    const updatedRoomReservation = await prisma.roomReservation.update({
-      where: {
-        id: roomReservationDto.id,
-      },
-      data: roomReservationDto,
-    });
-    return updatedRoomReservation;
-  };
-
-  cancelRoomReservation = async (roomReservationId) => {
-    const canceledRoomReservation = await prisma.roomReservation.update({
-      where: {
-        id: roomReservationId,
-      },
-      data: {
-        isDeleted: true,
-        deletedAt: new Date(),
-      },
-    });
-    return canceledRoomReservation;
-  };
+  
 }
 
 
