@@ -7,7 +7,6 @@ export class RoomDto {
     this.aminities = bodyReq.aminities;
     this.images = bodyReq.images;
     this.view = bodyReq.view;
-    this.isReserved = bodyReq.isReserved;
     this.isDeleted = bodyReq.isDeleted;
   }
 }

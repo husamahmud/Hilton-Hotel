@@ -145,7 +145,6 @@ model Room {
   aminities   String[]
   images      String[]
   view        String
-  isReserved  Boolean   @default(false)
   isDeleted   Boolean   @default(false)
 
   extraServices ExtraServices[]
