@@ -19,6 +19,14 @@ app.use('/api/v1/auth', authRouter);
 import userRoute from './routes/user.route.js';
 app.use('/api/v1/user', userRoute);
 
+// room
+import roomRoute from './routes/room.route.js';
+app.use('/api/v1/room', roomRoute);
+
+import roomReservationRoute from './routes/roomResevation.route.js';
+app.use('/api/v1/roomreservation', roomReservationRoute);
+
+
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });

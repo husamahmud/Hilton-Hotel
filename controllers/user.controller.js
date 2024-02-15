@@ -75,6 +75,8 @@ export class UserController {
     const userDto = new UserDto(req.body);
     userDto.id = req.params.userId;
     const userDao = new UserDao();
+
+    if (req.file) userDto.profilePic = req.file.path; // TODO If the photo exists
     try {
       const { error } = await UserValidate.updateUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
