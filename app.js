@@ -26,13 +26,13 @@ app.use('/api/v1/room', roomRoute);
 import roomReservationRoute from './routes/roomResevation.route.js';
 app.use('/api/v1/roomreservation', roomReservationRoute);
 
-
-
-
-
 // menu route
 import menuRoute from './routes/menu.route.js';
 app.use('/api/v1/menu', menuRoute);
+
+// restaurant
+import restaurantRoute from './routes/restaurant.route.js';
+app.use('/api/v1/restaurant', restaurantRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
