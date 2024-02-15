@@ -213,7 +213,9 @@ model Menu {
   name        String
   ingredients String
   price       String
+  image       String
   isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
 
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
