@@ -27,6 +27,13 @@ import roomReservationRoute from './routes/roomResevation.route.js';
 app.use('/api/v1/roomreservation', roomReservationRoute);
 
 
+
+
+
+// menu route
+import menuRoute from './routes/menu.route.js';
+app.use('/api/v1/menu', menuRoute);
+
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });
