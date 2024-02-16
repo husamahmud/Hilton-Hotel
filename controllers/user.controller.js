@@ -10,7 +10,7 @@ export class UserController {
       req.body.password = await hashPassword(req.body.password);
       req.body.birthDate = new Date(req.body.birthDate);
 
-      if (req.file) req.body.profilePic = req.file.path; // TODO If the photo exists
+      if (req.file) req.body.profilePic = req.file.path;
       const userDto = new UserDto(req.body);
       const userDao = new UserDao();
 
@@ -76,7 +76,7 @@ export class UserController {
     userDto.id = req.params.userId;
     const userDao = new UserDao();
 
-    if (req.file) userDto.profilePic = req.file.path; // TODO If the photo exists
+    if (req.file) userDto.profilePic = req.file.path;
     try {
       const { error } = await UserValidate.updateUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });

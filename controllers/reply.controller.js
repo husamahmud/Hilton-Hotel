@@ -49,19 +49,6 @@ export class ReplyController {
     }
   };
 
-  static getRepliesByEmail = async (req, res) => {
-    const replyDao = new ReplyDao();
-    try {
-      const replies = await replyDao.getRepliesByCommentId(req.params.email);
-      return res
-        .status(200)
-        .json({ message: 'Replies retrieved successfully', data: replies });
-
-    } catch (e) {
-      return res.status(500).json({ error: e.message || 'Eternal server error' });
-    }
-  };
-
   static updateReply = async (req, res) => {
     const replyDto = new ReplyDto(req.body);
     const replyDao = new ReplyDao();

@@ -25,26 +25,6 @@ export class ReplyDao {
     return reply;
   };
 
-  getRepliesByCommentId = async (commentId) => {
-    const replies = await prisma.reply.findMany({
-      where: {
-        commentId,
-      },
-    });
-
-    return replies;
-  };
-
-  getRepliesByUserId = async (userId) => {
-    const replies = await prisma.reply.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    return replies;
-  };
-
   updateReply = async (replyDto) => {
     const reply = await prisma.reply.update({
       where: {
