@@ -8,8 +8,6 @@ const app = express();
 app.use(json());
 app.use(urlencoded({ extended: false }));
 
-// TODO handle not found 404
-
 import adminRouter from './routes/admin.route.js';
 app.use('/api/v1/admin', adminRouter);
 
@@ -37,6 +35,17 @@ app.use('/api/v1/restaurant', restaurantRoute);
 // news
 import newsRoute from './routes/news.route.js';
 app.use('/api/v1/news', newsRoute);
+
+// reply
+import replyRoute from './routes/reply.route.js';
+app.use('/api/v1/reply', replyRoute);
+
+
+app.use((req, res) => {
+  res.status(404).json({ message: '404: Not Found' });
+});
+
+
 
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
