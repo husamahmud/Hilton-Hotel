@@ -32,13 +32,20 @@ app.use('/api/v1/menu', menuRoute);
 import restaurantRoute from './routes/restaurant.route.js';
 app.use('/api/v1/restaurant', restaurantRoute);
 
+// news
+import newsRoute from './routes/news.route.js';
+app.use('/api/v1/news', newsRoute);
+
 // reply
 import replyRoute from './routes/reply.route.js';
 app.use('/api/v1/reply', replyRoute);
 
+
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
+
+
 
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
