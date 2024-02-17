@@ -4,23 +4,23 @@ import prisma from '../prisma/prisma-client.js';
 export class ExtraServicesDao {
     // validate IDs in all methods
 
-    createExtraServices(extraServicesDto) {
+    createExtraServices = async (extraServicesDto) => {
         console.log(extraServicesDto);
-        const extraServices = prisma.extraServices.create({
+        const extraServices = await prisma.extraServices.create({
             data: extraServicesDto
         })
 
         return extraServices;
     }
 
-    getAllExtraServices() {
-        const extraServices = prisma.extraServices.findMany();
+    getAllExtraServices = async () => {
+        const extraServices = await prisma.extraServices.findMany();
 
         return extraServices;
     }
 
-    getExtraServicesById(serviceId) {
-        const extraServices = prisma.extraServices.findUnique({
+    getExtraServicesById = async (serviceId) => {
+        const extraServices = await prisma.extraServices.findUnique({
             where: {
                 id: serviceId
             }
@@ -29,9 +29,9 @@ export class ExtraServicesDao {
         return extraServices;
     }
 
-    getRoomExtraServices(roomId) {
+    getRoomExtraServices = async (roomId) => {
         console.log(roomId);
-        const extraServices = prisma.extraServices.findMany({
+        const extraServices = await prisma.extraServices.findMany({
             where: {
                 roomId,
                 isDeleted: false
@@ -41,9 +41,9 @@ export class ExtraServicesDao {
         return extraServices;
     }
 
-    updateExtraServices(extraServicesDto) {
+    updateExtraServices = async (extraServicesDto) => {
         console.log(extraServicesDto);
-        const extraServices = prisma.extraServices.update({
+        const extraServices = await prisma.extraServices.update({
             where: {
                 id : extraServicesDto.id
             },
@@ -53,8 +53,8 @@ export class ExtraServicesDao {
         return extraServices;
     }
 
-    deleteExtraServices(serviceId) {
-        const extraServices = prisma.extraServices.update({
+    deleteExtraServices = async (serviceId) => {
+        const extraServices = await prisma.extraServices.update({
             where: {
                 id: serviceId
             },
