@@ -41,6 +41,10 @@ import replyRoute from './routes/reply.route.js';
 app.use('/api/v1/reply', replyRoute);
 
 
+// review
+import reviewRoute from './routes/review.route.js';
+app.use('/api/v1/review', reviewRoute);
+
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
