@@ -41,6 +41,10 @@ import replyRoute from './routes/reply.route.js';
 app.use('/api/v1/reply', replyRoute);
 
 
+// extra services
+import extraServicesRoute from './routes/extraServices.route.js';
+app.use('/api/v1/extraservices', extraServicesRoute);
+
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
