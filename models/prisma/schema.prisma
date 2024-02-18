@@ -38,8 +38,9 @@ enum ROLE {
 model Admin {
   id String @id @default(uuid())
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   fullName       String
   email          String   @unique
   password       String
@@ -62,8 +63,9 @@ model Admin {
 model User {
   id String @id @default(uuid())
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   fName          String
   lName          String
   username       String   @unique
@@ -136,8 +138,9 @@ model RefreshToken {
 model Room {
   id String @id @default(uuid())
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   roomNum     String    @unique
   types       RoomTypes @default(JUNIOR_SUITE)
   price       String
@@ -152,12 +155,13 @@ model Room {
 }
 
 model RoomReservation {
-  id String @id @default(uuid())
+  id     String @id @default(uuid())
+  userId String
+  roomId String
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  userId    String
-  roomId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   checkIn   DateTime
   checkOut  DateTime
   adults    Int
@@ -175,6 +179,9 @@ model ExtraServices {
   id     String @id @default(uuid())
   roomId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   name       String
   price      String
   facilities String[]
@@ -187,6 +194,9 @@ model Review {
   id     String @id @default(uuid())
   userId String @unique
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   rating    Float
   comment   String
   isDeleted Boolean @default(false)
@@ -198,6 +208,9 @@ model Restaurant {
   id     String @id @default(uuid())
   userId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   description String
 
   user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -208,6 +221,9 @@ model Menu {
   id           String @id @default(uuid())
   userId       String
   restaurantId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   menuTypes   MenuTypes
   name        String
@@ -225,6 +241,9 @@ model ClubHouse {
   id     String @id @default(uuid())
   userId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   clubhouseTypes clubhouseTypes
   description    String
   startTime      DateTime
@@ -235,7 +254,11 @@ model ClubHouse {
 }
 
 model FAQS {
-  id        String  @id @default(uuid())
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   question  String
   answer    String
   isDeleted Boolean @default(false)
@@ -261,6 +284,9 @@ model Reply {
   id     String @id @default(uuid())
   newsId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   fullName  String
   email     String
   comment   String
@@ -272,6 +298,9 @@ model Reply {
 model ContactUs {
   id      String @id @default(uuid())
   adminId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   fullName    String
   email       String
@@ -290,6 +319,9 @@ model AppSettings {
   id      String @id @default(uuid())
   adminId String @unique
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   hotelName   String
   logo        String
   address     String
@@ -306,6 +338,9 @@ model HomeSliders {
   id      String @id @default(uuid())
   adminId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   photo     String
   header    String
   paragraph String
@@ -317,6 +352,9 @@ model HomeSliders {
 model PromotionVid {
   id      String @id @default(uuid())
   adminId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   video       String
   description String
