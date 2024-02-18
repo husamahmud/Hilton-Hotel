@@ -51,6 +51,10 @@ app.use('/api/v1/settings', appSettingsRoute);
 import reviewRoute from './routes/review.route.js';
 app.use('/api/v1/review', reviewRoute);
 
+// extra services
+import extraServicesRoute from './routes/extraServices.route.js';
+app.use('/api/v1/extraservices', extraServicesRoute);
+
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
