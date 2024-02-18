@@ -40,7 +40,8 @@ app.use('/api/v1/news', newsRoute);
 import replyRoute from './routes/reply.route.js';
 app.use('/api/v1/reply', replyRoute);
 
-
+import contactUsRoute from './routes/contactUs.route.js';
+app.use('/api/v1/contact', contactUsRoute);
 
 // app settings
 import appSettingsRoute from './routes/appSettings.route.js';
