@@ -68,21 +68,35 @@ app.use('/api/v1/reply', replyRoute);
 import clubHouseRoute from './routes/clubHouse.route.js';
 app.use('/api/v1/clubHouse', clubHouseRoute);
 
-
+/**
+ * contactUs route
+ **/
 import contactUsRoute from './routes/contactUs.route.js';
 app.use('/api/v1/contact', contactUsRoute);
 
-// app settings
+/**
+ * app settings route
+ **/
 import appSettingsRoute from './routes/appSettings.route.js';
 app.use('/api/v1/settings', appSettingsRoute);
 
-// review
+/**
+ * review route
+ **/
 import reviewRoute from './routes/review.route.js';
 app.use('/api/v1/review', reviewRoute);
 
-// extra services
+/**
+ * extra services route
+ **/
 import extraServicesRoute from './routes/extraServices.route.js';
 app.use('/api/v1/extraservices', extraServicesRoute);
+
+/**
+ * faqs route
+ **/
+import faqsRoute from './routes/faqs.route.js';
+app.use('/api/v1/faqs', faqsRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
