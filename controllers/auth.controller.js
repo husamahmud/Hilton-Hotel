@@ -130,7 +130,6 @@ export class AuthController {
   };
 
   static chagnePassword = async (req, res) => {
-    // TODO add user to request
     try {
       const user = await prisma.user.findUnique({
         where: {

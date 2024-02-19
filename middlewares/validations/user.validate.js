@@ -10,8 +10,8 @@ export class UserValidate {
       password: Joi.string().min(8).max(255).required(),
       profilePic: Joi.string().min(5).max(255),
       birthDate: Joi.date().required(),
-      country: Joi.string().required().trim(), // TODO min?
-      nationalID: Joi.string().required().trim(), // TODO min?
+      country: Joi.string().required().trim(),
+      nationalID: Joi.string().required().trim(),
       isBlocked: Joi.boolean().default(false),
       isDeleted: Joi.boolean().default(false),
       emailConfirmed: Joi.boolean().default(false),
@@ -30,8 +30,8 @@ export class UserValidate {
       password: Joi.string().min(8).max(255),
       profilePic: Joi.string().min(5).max(255),
       birthDate: Joi.date(),
-      country: Joi.string().trim(), // TODO min?
-      nationalID: Joi.string().trim(), // TODO min?
+      country: Joi.string().trim(),
+      nationalID: Joi.string().trim(),
       isBlocked: Joi.boolean().default(false),
       isDeleted: Joi.boolean().default(false),
     });

@@ -5,8 +5,6 @@ import { hashPassword } from '../utilities/password.js';
 import { EmailController } from './email.controller.js';
 
 export class AdminController {
-  // TODO multer
-  // TODO node mailer
   static createAdmin = async (req, res) => {
     try {
       req.body.password = await hashPassword(req.body.password);
@@ -65,7 +63,6 @@ export class AdminController {
   };
 
   static updateAdmin = async (req, res) => {
-    // TODO confirmation email on update
     const adminDto = new AdminDto(req.body);
     adminDto.id = req.params.adminId;
     const adminDao = new AdminDao();
