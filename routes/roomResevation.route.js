@@ -14,4 +14,8 @@ router
   .put(RoomReservationController.updateRoomReservation)
   .delete(RoomReservationController.cancelRoomReservation);
 
+router
+  .route('/user/:userId')
+  .get(RoomReservationController.getRoomReservationByUserId);
+
 export default router;

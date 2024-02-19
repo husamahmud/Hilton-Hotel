@@ -32,6 +32,16 @@ export class RoomReservationDao {
         return roomReservations;
       }
 
+      getRoomReservationByUserId = async (userId) => {
+        const roomReservations = await prisma.roomReservation.findMany({
+          where: {
+            userId,
+            isDeleted: false,
+          },
+        });
+        return roomReservations;
+      }
+
       getRoomReservationById = async (roomReservationId) => {
         const roomReservation = await prisma.roomReservation.findUnique({
           where: {

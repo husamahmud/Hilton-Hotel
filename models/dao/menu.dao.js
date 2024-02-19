@@ -48,6 +48,7 @@ export class MenuDao {
     }
 
     updateMenu = async (menuDto) => {
+
         const menu = await prisma.menu.update({
             where: {
                 id: menuDto.id
