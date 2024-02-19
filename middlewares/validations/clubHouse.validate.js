@@ -3,6 +3,7 @@ import Joi from 'joi';
 export class ClubHouseValidate {
   static createClubHouse(clubHouseDto) {
     const schema = Joi.object({
+      id: Joi.string(),
       userId: Joi.string().required(),
       clubhouseTypes: Joi.valid('SPA', 'GYM', 'HEALTHCLUB').required(),
       description: Joi.string().required(),
@@ -15,7 +16,7 @@ export class ClubHouseValidate {
 
   static updateClubHouse(clubHouseDto) {
     const schema = Joi.object({
-      id: Joi.string(),
+      id: Joi.string().required(),
       userId: Joi.string(),
       clubhouseTypes: Joi.valid('SPA', 'GYM', 'HEALTHCLUB'),
       description: Joi.string(),
