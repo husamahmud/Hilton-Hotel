@@ -1,7 +1,7 @@
-import { SettingsDto } from "../models/dto/appSettings.dto";
-import { SettingsDao } from "../models/dao/appSettings.dao";
-import { SettingsValidate } from "../middlewares/validations/appSettings.validate";
-import { validateAdminId } from "../utilities/Id_validations/users.id.validation";
+import { SettingsDto } from "../models/dto/appSettings.dto.js";
+import { SettingsDao } from "../models/dao/appSettings.dao.js";
+import { SettingsValidate } from "../middlewares/validations/appSettings.validate.js";
+import { validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
 
 export class SettingsController {
 

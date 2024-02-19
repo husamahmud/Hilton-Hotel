@@ -1,4 +1,4 @@
-import prisma from "../../models/prisma/prisma-client";
+import prisma from "../../models/prisma/prisma-client.js";
 
 export async function validateRoomId(roomId) {
     const room = await prisma.room.findUnique({
@@ -26,4 +26,3 @@ export async function validateNewsId (newsId) {
     });
     if (!news) throw new Error("News not found");
 }
-
