@@ -1,7 +1,7 @@
 import { RestaurantDto } from "../models/dto/restaurant.dto.js";
 import { RestaurantDao } from "../models/dao/restaurant.dao.js";
 import { RestaurantValidate } from "../middlewares/validations/restaurant.validate.js";
-import { ValidateAdminId, validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
+import { validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
 
 export class RestaurantController {
 
