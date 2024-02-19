@@ -15,6 +15,16 @@ export class ReplyDao {
     return replies;
   };
 
+  getAllRepliesByNewsId = async (newsId) => {
+    const replies = await prisma.reply.findMany({
+      where: {
+        newsId,
+      },
+    });
+
+    return replies;
+  };
+
   getReplyById = async (id) => {
     const reply = await prisma.reply.findUnique({
       where: {

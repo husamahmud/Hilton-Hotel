@@ -15,4 +15,8 @@ router
   .put(ReplyController.updateReply)
   .delete(ReplyController.deleteReply);
 
+router
+  .route('/news/:newsId')
+  .get(ReplyController.getRepliesByNewsId);
+
 export default router;
