@@ -1,6 +1,7 @@
 import { ReviewDto } from "../models/dto/review.dto.js";
 import { ReviewDao } from "../models/dao/review.dao.js";
 import { ReviewValidate } from "../middlewares/validations/review.validate.js";
+import { validateUserId } from "../utilities/Id_validations/users.id.validation.js";
 
 export class ReviewController {
 
@@ -10,6 +11,9 @@ export class ReviewController {
         const reviewDao = new ReviewDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+
             const { error } = await ReviewValidate.createReview(reviewDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -41,6 +45,9 @@ export class ReviewController {
         const reviewDao = new ReviewDao();
 
         try {
+
+            await validateUserId(userId);
+
             const reviews = await reviewDao.getReviewsByUserId(userId);
             res.status(200).json({ data: reviews });
         } catch (error) {
@@ -79,6 +86,9 @@ export class ReviewController {
         const reviewDao = new ReviewDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+
             const { error } = await ReviewValidate.updateReview(reviewDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -96,6 +106,9 @@ export class ReviewController {
         const reviewDao = new ReviewDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+
             const review = await reviewDao.deleteReview(reviewId);
             res.status(200).json({ message: 'Review deleted successfully', data: review });
         } catch (error) {

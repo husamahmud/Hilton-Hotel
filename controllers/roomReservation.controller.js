@@ -1,6 +1,8 @@
 import { RoomReservationValidate } from "../middlewares/validations/roomReservation.validate.js";
 import { RoomReservationDto } from "../models/dto/roomReservation.dto.js";
 import { RoomReservationDao } from "../models/dao/roomReservation.dao.js";
+import { validateUserId } from "../utilities/Id_validations/users.id.validation.js";
+import { validateRoomId } from "../utilities/Id_validations/hotelServices.id.validate.js";
 
 export class RoomReservationController {
 
@@ -14,6 +16,10 @@ export class RoomReservationController {
         roomReservationDto.checkOut = new Date(roomReservationDto.checkOut)
 
         try {
+
+            await validateUserId(req.body.userId);
+            await validateRoomId(req.body.roomId);
+
             const { error } = await RoomReservationValidate.createRoomReservation(roomReservationDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -36,6 +42,23 @@ export class RoomReservationController {
                 data: roomReservations,
             });
         } catch (e) {
+            return res.status(500).json({ error: e.message || 'Internal server error' });
+        }
+    }
+
+    static getRoomReservationByUserId = async (req, res) => {
+        const roomReservationDao = new RoomReservationDao();
+        try {
+
+            await validateUserId(req.params.userId);
+
+            const roomReservations = await roomReservationDao.getRoomReservationByUserId(req.params.userId);
+            return res.status(200).json({
+                message: 'Room reservations retrieved successfully',
+                data: roomReservations,
+            });
+        }
+        catch (e) {
             return res.status(500).json({ error: e.message || 'Internal server error' });
         }
     }
@@ -64,6 +87,10 @@ export class RoomReservationController {
         if (roomReservationDto.checkOut) roomReservationDto.checkOut = new Date(roomReservationDto.checkOut)
 
         try {
+
+            await validateUserId(req.body.userId);
+            await validateRoomId(req.body.roomId);
+
             const { error } = await RoomReservationValidate.updateRoomReservation(roomReservationDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 

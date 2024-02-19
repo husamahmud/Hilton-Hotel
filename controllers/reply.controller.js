@@ -1,6 +1,7 @@
 import { ReplyDao } from '../models/dao/reply.dao.js';
 import { ReplyDto } from '../models/dto/reply.dto.js';
 import { ReplyValidate } from '../middlewares/validations/reply.validate.js';
+import { validateNewsId } from '../utilities/Id_validations/hotelServices.id.validate.js';
 
 export class ReplyController {
   static createReply = async (req, res) => {
@@ -8,6 +9,9 @@ export class ReplyController {
     const replyDao = new ReplyDao();
 
     try {
+
+      await validateNewsId(req.body.newsId); // TODO - req.user
+
       const { error } = await ReplyValidate.createReply(replyDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -36,6 +40,23 @@ export class ReplyController {
     }
   };
 
+  static getRepliesByNewsId = async (req, res) => {
+    const replyDao = new ReplyDao();
+
+    try {
+
+      await validateNewsId(req.params.newsId);
+
+      const replies = await replyDao.getAllRepliesByNewsId(req.params.newsId);
+      return res
+        .status(200)
+        .json({ message: 'Replies retrieved successfully', data: replies });
+
+    } catch (e) {
+      return res.status(500).json({ error: e.message || 'Eternal server error' });
+    }
+  }
+
   static getReplyById = async (req, res) => {
     const replyDao = new ReplyDao();
     try {
@@ -55,6 +76,9 @@ export class ReplyController {
     replyDto.id = req.params.replyId;
 
     try {
+
+      await validateNewsId(req.body.newsId);
+
       const { error } = await ReplyValidate.updateReply(replyDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 

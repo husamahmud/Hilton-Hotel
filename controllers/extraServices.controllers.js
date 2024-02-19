@@ -1,6 +1,7 @@
 import { ExtraServicesDto } from "../models/dto/extraServices.dto.js";
 import { ExtraServicesDao } from "../models/dao/extraServices.dao.js";
 import { ExtraServicesValidation } from "../middlewares/validations/extraServices.validate.js";
+import { validateRoomId } from "../utilities/Id_validations/hotelServices.id.validate.js";
 
 export class ExtraServicesController {
 
@@ -9,6 +10,9 @@ export class ExtraServicesController {
         const extraServicesDao = new ExtraServicesDao();
 
         try {
+
+            await validateRoomId(req.body.roomId);
+
             const { error } = await ExtraServicesValidation.createExtraServices(extraServicesDto);
             if (error) return res.status(400).json({ message: error.message });
 
@@ -53,6 +57,9 @@ export class ExtraServicesController {
         const extraServicesDao = new ExtraServicesDao();
 
         try {
+
+            await validateRoomId(roomId);
+
             const extraServices = await extraServicesDao.getRoomExtraServices(roomId);
             return res.status(200).json({ message: 'Extra services fetched successfully', data: extraServices });
 
@@ -68,6 +75,9 @@ export class ExtraServicesController {
         const extraServicesDao = new ExtraServicesDao();
 
         try {
+
+            await validateRoomId(req.body.roomId);
+
             const { error } = await ExtraServicesValidation.updateExtraServices(extraServicesDto);
             if (error) return res.status(400).json({ message: error.message });
 

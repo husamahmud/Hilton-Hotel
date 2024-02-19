@@ -1,6 +1,7 @@
 import { RestaurantDto } from "../models/dto/restaurant.dto.js";
 import { RestaurantDao } from "../models/dao/restaurant.dao.js";
 import { RestaurantValidate } from "../middlewares/validations/restaurant.validate.js";
+import { ValidateAdminId, validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
 
 export class RestaurantController {
 
@@ -9,6 +10,8 @@ export class RestaurantController {
         const restaurantDao = new RestaurantDao();
 
         try {
+
+            await validateAdminId(req.body.adminId);
 
             const { error } = await RestaurantValidate.createRestaurant(restaurantDto);
             if (error) return res.status(400).json({error: error.message});
@@ -59,6 +62,8 @@ export class RestaurantController {
         restaurantDto.id = req.params.restaurantId;
 
         try {
+
+            await ValidateAdminId(req.body.adminId);
 
             const { error } = await RestaurantValidate.updateRestaurant(restaurantDto);
             if (error) return res.status(400).json({error: error.message});

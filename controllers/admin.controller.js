@@ -3,6 +3,7 @@ import { AdminDto } from '../models/dto/admin.dto.js';
 import { AdminValidation } from '../middlewares/validations/admin.validate.js';
 import { hashPassword } from '../utilities/password.js';
 import { EmailController } from './email.controller.js';
+import { validateAdminId } from '../utilities/Id_validations/users.id.validation.js';
 
 export class AdminController {
   static createAdmin = async (req, res) => {
@@ -67,6 +68,9 @@ export class AdminController {
     adminDto.id = req.params.adminId;
     const adminDao = new AdminDao();
     try {
+
+      await validateAdminId(adminDto.id);
+
       const { error } = await AdminValidation.updateAdmin(adminDto);
       if (error) return res.status(400).json({ error: error.message });
 
@@ -92,6 +96,9 @@ export class AdminController {
     const adminDao = new AdminDao();
 
     try {
+
+      await validateAdminId(adminId);
+
       const deletedAdmin = await adminDao.softDeleteAdmin(adminId);
       return res
         .status(200)
@@ -113,6 +120,9 @@ export class AdminController {
     const adminDao = new AdminDao();
 
     try {
+
+      await validateAdminId(adminId);
+
       const deletedAdmin = await adminDao.hardDeleteAdmin(adminId);
       return res
         .status(200)

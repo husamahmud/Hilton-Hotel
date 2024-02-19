@@ -3,6 +3,7 @@ import { UserDto } from '../models/dto/user.dto.js';
 import { UserValidate } from '../middlewares/validations/user.validate.js';
 import { hashPassword } from '../utilities/password.js';
 import { EmailController } from './email.controller.js';
+import { validateUserId } from '../utilities/Id_validations/users.id.validation.js';
 
 export class UserController {
   static createUser = async (req, res) => {
@@ -78,6 +79,9 @@ export class UserController {
 
     if (req.file) userDto.profilePic = req.file.path;
     try {
+
+      await validateUserId(req.body.userId);
+
       const { error } = await UserValidate.updateUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -106,6 +110,9 @@ export class UserController {
     const userDao = new UserDao();
 
     try {
+
+      await validateUserId(userId);
+
       const deletedUser = await userDao.softDeleteUser(userId);
       return res
         .status(200)
@@ -128,6 +135,9 @@ export class UserController {
     const userDao = new UserDao();
 
     try {
+
+      await validateUserId(userId);
+
       const deletedUser = await userDao.hardDeleteUser(userId);
       return res
         .status(200)

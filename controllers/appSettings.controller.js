@@ -1,6 +1,7 @@
 import { SettingsDto } from "../models/dto/appSettings.dto";
 import { SettingsDao } from "../models/dao/appSettings.dao";
 import { SettingsValidate } from "../middlewares/validations/appSettings.validate";
+import { validateAdminId } from "../utilities/Id_validations/users.id.validation";
 
 export class SettingsController {
 
@@ -9,6 +10,9 @@ export class SettingsController {
         const settingsDao = new SettingsDao();
 
         try {
+
+            await validateAdminId(req.body.adminId); // TODO - req.user
+
             const { error } = await SettingsValidate.createSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
 
@@ -35,6 +39,10 @@ export class SettingsController {
         const settingsDao = new SettingsDao();
 
         try {
+
+
+            await validateAdminId(req.body.adminId); // TODO - req.user
+
             const { error } = await SettingsValidate.updateSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
 

@@ -1,6 +1,8 @@
 import { MenuDto } from "../models/dto/menu.dto.js";
 import { MenuDao } from "../models/dao/menu.dao.js";
 import { MenuValidate } from "../middlewares/validations/menu.validate.js";
+import { validateUserId } from "../utilities/Id_validations/users.id.validation.js";
+import { validateRestaurantId } from "../utilities/Id_validations/hotelServices.id.validate.js";
 
 
 export class MenuController {
@@ -11,6 +13,10 @@ export class MenuController {
         const menuDao = new MenuDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+            await validateRestaurantId(req.body.restaurantId);
+
             const { error } = await MenuValidate.createMenu(menuDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -50,6 +56,8 @@ export class MenuController {
         const menuDao = new MenuDao();
 
         try {
+            await validateRestaurantId(req.body.restaurantId);
+
             const menus = await menuDao.getMenusByRestaurantId(req.params.restaurantId);
             res.status(200).json({ message: 'Menus fetched successfully', data: menus });
         } catch (error) {
@@ -62,6 +70,9 @@ export class MenuController {
         const menuDao = new MenuDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+
             const menus = await menuDao.getMenuByUserId(req.params.userId);
             res.status(200).json({ message: 'Menus fetched successfully', data: menus });
         } catch (error) {
@@ -78,6 +89,10 @@ export class MenuController {
         const menuDao = new MenuDao();
 
         try {
+
+            await validateUserId(req.body.userId);
+            await validateRestaurantId(req.body.restaurantId);
+
             const { error } = await MenuValidate.updateMenu(menuDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 

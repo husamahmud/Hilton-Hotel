@@ -1,6 +1,7 @@
 import { NewsDto } from '../models/dto/news.dto.js';
 import { NewsDao } from '../models/dao/news.dao.js';
 import { NewsValidate } from '../middlewares/validations/news.validate.js';
+import { validateAdminId } from '../utilities/Id_validations/users.id.validation.js';
 
 export class NewsController {
   static createNews = async (req, res) => {
@@ -8,6 +9,9 @@ export class NewsController {
     const newsDao = new NewsDao();
 
     try {
+
+      await validateAdminId(req.body.adminId); // TODO - req.user
+
       const { error } = await NewsValidate.createNews(newsDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -54,6 +58,9 @@ export class NewsController {
     const newsDao = new NewsDao();
 
     try {
+
+      await validateAdminId(req.params.adminId);
+
       const news = await newsDao.getNewsByAdminId(req.params.adminId);
       return res
         .status(200)
@@ -89,6 +96,9 @@ export class NewsController {
     if (req.files) newsDto.images = req.files.map(img => img.path);
 
     try {
+
+      await validateAdminId(req.body.adminId); // TODO - req.user
+
       const { error } = await NewsValidate.updateNews(newsDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 

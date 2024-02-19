@@ -1,6 +1,7 @@
 import { ContactUsDto } from "../models/dto/contactUs.dto.js";
 import { ContactUsDao } from "../models/dao/contactUs.dao.js";
 import { ContactUsValidate } from "../middlewares/validations/contactUs.validate.js";
+import { validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
 
 export class ContactUsController {
 
@@ -52,6 +53,9 @@ export class ContactUsController {
         const contactUsDao = new ContactUsDao();
 
         try {
+
+            await validateAdminId(req.body.adminId); // TODO - req.user
+
             const { error } = await ContactUsValidate.updateContactUs(contactUsDto);
             if (error) return res.status(400).json({ message: error.message });
 
