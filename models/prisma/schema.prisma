@@ -54,6 +54,7 @@ model Admin {
 
   news         News[]
   contact      ContactUs[]
+  restaurant   Restaurant[]
   AppSettings  AppSettings?
   ResetToken   ResetToken?
   ConfirmToken ConfirmToken?
@@ -82,7 +83,6 @@ model User {
 
   room         RoomReservation[]
   review       Review?
-  restaurant   Restaurant[]
   menu         Menu[]
   clubHouse    ClubHouse[]
   ResetToken   ResetToken?
@@ -206,14 +206,14 @@ model Review {
 
 model Restaurant {
   id     String @id @default(uuid())
-  userId String
+  adminId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   description String
 
-  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
   menu Menu[]
 }
 
@@ -297,7 +297,7 @@ model Reply {
 
 model ContactUs {
   id      String @id @default(uuid())
-  adminId String
+  adminId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -310,7 +310,7 @@ model ContactUs {
   isDeleted   Boolean @default(false)
   isRead      Boolean @default(false)
 
-  byAdmin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  byAdmin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 // DashBoard
