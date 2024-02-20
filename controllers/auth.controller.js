@@ -19,7 +19,7 @@ export class AuthController {
       const token = createToken(user, '3d');
 
       if (req.body.isRemember) {
-        await prisma.RefreshToken.create({
+        await prisma.refreshToken.create({
           data: {
             token: createToken(user, '5d'),
             userId: user.id,
