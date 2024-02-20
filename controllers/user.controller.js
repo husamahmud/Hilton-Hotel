@@ -4,7 +4,8 @@ import { UserValidate } from '../middlewares/validations/user.validate.js';
 import { hashPassword } from '../utilities/password.js';
 import { EmailController } from './email.controller.js';
 import { validateUserId } from '../utilities/Id_validations/users.id.validation.js';
-
+import fs from 'fs';
+import path from 'path';
 export class UserController {
   static createUser = async (req, res) => {
     try {
@@ -80,7 +81,14 @@ export class UserController {
     if (req.file) userDto.profilePic = req.file.path;
     try {
 
-      await validateUserId(req.body.userId);
+      const user = await userDao.getUserById(userDto.id);
+
+      if (user.profilePic && userDto.profilePic) {
+        if (fs.existsSync(path.join(__dirname, `../uploads/${user.profilePic}`))) {
+            fs.unlinkSync(path.join(__dirname, `../uploads/${user.profilePic}`));
+      }
+    }
+
 
       const { error } = await UserValidate.updateUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });

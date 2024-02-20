@@ -3,7 +3,8 @@ import { MenuDao } from "../models/dao/menu.dao.js";
 import { MenuValidate } from "../middlewares/validations/menu.validate.js";
 import { validateUserId } from "../utilities/Id_validations/users.id.validation.js";
 import { validateRestaurantId } from "../utilities/Id_validations/hotelServices.id.validate.js";
-
+import fs from 'fs';
+import path from 'path';
 
 export class MenuController {
     static createMenu = async (req, res) => {
@@ -90,14 +91,21 @@ export class MenuController {
 
         try {
 
+            const menu = await menuDao.getMenuById(req.params.menuId);
+            if (menuDto.image && menu.image) {
+                if (fs.existsSync(path.join(__dirname, `../uploads/${menu.image}`))) {
+                    fs.unlinkSync(path.join(__dirname, `../uploads/${menu.image}`));
+                  };
+            }
+
             await validateUserId(req.body.userId);
             await validateRestaurantId(req.body.restaurantId);
 
             const { error } = await MenuValidate.updateMenu(menuDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
-            const menu = await menuDao.updateMenu(menuDto);
-            res.status(200).json({ message: 'Menu updated successfully', data: menu });
+            const updatedMenu = await menuDao.updateMenu(menuDto);
+            res.status(200).json({ message: 'Menu updated successfully', data: updatedMenu });
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });

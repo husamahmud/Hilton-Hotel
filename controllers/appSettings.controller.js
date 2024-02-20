@@ -2,7 +2,8 @@ import { SettingsDto } from "../models/dto/appSettings.dto.js";
 import { SettingsDao } from "../models/dao/appSettings.dao.js";
 import { SettingsValidate } from "../middlewares/validations/appSettings.validate.js";
 import { validateAdminId } from "../utilities/Id_validations/users.id.validation.js";
-
+import fs from 'fs';
+import path from 'path';
 export class SettingsController {
 
     static createSettings = async (req, res) => {
@@ -38,16 +39,25 @@ export class SettingsController {
         const settingsDto = new SettingsDto(req.body);
         const settingsDao = new SettingsDao();
 
+        if (req.file) settingsDto.logo = req.file.path;
+
         try {
 
+            const settings = await settingsDao.getSettings();
+
+            if (settingsDto.logo && settings.logo) {
+                if (fs.existsSync(path.join(__dirname, `../uploads/${settings.logo}`))) {
+                    fs.unlinkSync(path.join(__dirname, `../uploads/${settings.logo}`));
+                }
+            }
 
             await validateAdminId(req.body.adminId); // TODO - req.user
 
             const { error } = await SettingsValidate.updateSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
 
-            const settings = await settingsDao.updateSettings(settingsDto);
-            res.status(200).json({ message: "Settings updated successfully", data: settings });
+            const updatedSettings = await settingsDao.updateSettings(settingsDto);
+            res.status(200).json({ message: "Settings updated successfully", data: updatedSettings });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

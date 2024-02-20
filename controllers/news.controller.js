@@ -2,6 +2,8 @@ import { NewsDto } from '../models/dto/news.dto.js';
 import { NewsDao } from '../models/dao/news.dao.js';
 import { NewsValidate } from '../middlewares/validations/news.validate.js';
 import { validateAdminId } from '../utilities/Id_validations/users.id.validation.js';
+import fs from 'fs';
+import path from 'path';
 
 export class NewsController {
   static createNews = async (req, res) => {
@@ -97,15 +99,26 @@ export class NewsController {
 
     try {
 
-      await validateAdminId(req.body.adminId); // TODO - req.user
+        await validateAdminId(req.body.adminId); // TODO - req.user
 
-      const { error } = await NewsValidate.updateNews(newsDto);
-      if (error) return res.status(400).json({ message: error.details[0].message });
+        const news = await newsDao.getNewsById(req.params.newsId);
 
-      const news = await newsDao.updateNews(newsDto);
-      return res
-        .status(200)
-        .json({ message: 'News updated successfully', data: news });
+        if (news.images && newsDto.images) {
+            news.images.forEach(img => {
+                if (fs.existsSync(path.join(__dirname, `../uploads/${img}`))) {
+                    fs.unlinkSync(path.join(__dirname, `../uploads/${img}`));
+                }
+            })
+        }
+
+
+        const { error } = await NewsValidate.updateNews(newsDto);
+        if (error) return res.status(400).json({ message: error.details[0].message });
+
+        const updatedNews = await newsDao.updateNews(newsDto);
+        return res
+          .status(200)
+          .json({ message: 'News updated successfully', data: updatedNews });
 
     } catch (e) {
       console.error(e);

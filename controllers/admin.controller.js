@@ -4,6 +4,8 @@ import { AdminValidation } from '../middlewares/validations/admin.validate.js';
 import { hashPassword } from '../utilities/password.js';
 import { EmailController } from './email.controller.js';
 import { validateAdminId } from '../utilities/Id_validations/users.id.validation.js';
+import fs from 'fs';
+import path from 'path';
 
 export class AdminController {
   static createAdmin = async (req, res) => {
@@ -69,7 +71,16 @@ export class AdminController {
     const adminDao = new AdminDao();
     try {
 
-      await validateAdminId(adminDto.id);
+     // check if uploaded file exists in db and delete it from upload dir
+     const admin = await adminDao.getAdminById(adminDto.id);
+     if (adminDto.profilePic && req.file) {
+        if (fs.existsSync(path.join(__dirname, `../uploads/${admin.profilePic}`))) {
+          fs.unlinkSync(path.join(__dirname, `../uploads/${admin.profilePic}`));
+        };
+      }
+
+      if (req.file) adminDto.profilePic = req.file.path;
+
 
       const { error } = await AdminValidation.updateAdmin(adminDto);
       if (error) return res.status(400).json({ error: error.message });

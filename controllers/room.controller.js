@@ -1,7 +1,8 @@
 import { RoomDao } from "../models/dao/room.dao.js";
 import { RoomDto } from "../models/dto/room.dto.js";
 import { RoomValidate } from "../middlewares/validations/room.validate.js";
-
+import fs from 'fs';
+import path from 'path';
 export class RoomController {
 
     static createRoom = async (req, res) => {
@@ -73,13 +74,24 @@ export class RoomController {
         if (req.files) roomDto.images = req.files.map(img => img.path);
 
         try {
+
+            const room = await roomDao.getRoomById(req.params.roomId);
+
+            if (room.images && roomDto.images) {
+                room.images.forEach(img => {
+                    if (fs.existsSync(path.join(__dirname, `../uploads/${img}`))) {
+                        fs.unlinkSync(path.join(__dirname, `../uploads/${img}`));
+                    }
+                })
+            }
+
             const { error } = await RoomValidate.updateRoom(roomDto);
             if (error) return res.status(400).json({ message: error.details[0].message });
 
-            const room = await roomDao.updateRoom(roomDto);
+            const updatedRoom = await roomDao.updateRoom(roomDto);
             return res.status(200).json({
                 message: 'Room updated successfully',
-                data: room,
+                data: updatedRoom,
             });
         } catch (e) {
             return res.status(500).json({ error: e.message || 'Internal server error' });
