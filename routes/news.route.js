@@ -7,13 +7,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(upload.single('news'), NewsController.createNews)
+  .post(upload.any(), NewsController.createNews)
   .get(NewsController.getAllNews);
 
 router
   .route('/:newsId')
   .get(NewsController.getNewsById)
-  .put(upload.single('news'), NewsController.updateNews)
+  .put(upload.any(), NewsController.updateNews)
   .delete(NewsController.deleteById);
 
 router
