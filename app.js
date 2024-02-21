@@ -100,7 +100,9 @@ app.use('/api/v1/extraservices', verifyToken, extraServicesRoute);
 import faqsRoute from './routes/faqs.route.js';
 app.use('/api/v1/faqs', verifyToken, faqsRoute);
 
-
+// homeSliders route
+import homeSlidersRoute from './routes/homeSliders.route.js';
+app.use('/api/v1/sliders', verifyToken, homeSlidersRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
