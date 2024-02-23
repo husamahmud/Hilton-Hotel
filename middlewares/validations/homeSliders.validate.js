@@ -8,6 +8,7 @@ export class homeSlidersValidate {
             photo: Joi.string().required(),
             header: Joi.string().required(),
             paragraph: Joi.string().required(),
+            isDeleted : Joi.boolean().default(false),
         });
         return schema.validateAsync(sliderDto);
     }
@@ -19,6 +20,7 @@ export class homeSlidersValidate {
             photo: Joi.string(),
             header: Joi.string(),
             paragraph: Joi.string(),
+            isDeleted : Joi.boolean(),
         });
         return schema.validateAsync(sliderDto);
     }

@@ -55,10 +55,12 @@ model Admin {
   news         News[]
   contact      ContactUs[]
   restaurant   Restaurant[]
-  AppSettings  AppSettings?
+  AppSettings  AppSettings[]
   ResetToken   ResetToken?
   ConfirmToken ConfirmToken?
   RefreshToken RefreshToken?
+  HomeSliders  HomeSliders[]
+  PromotionVid PromotionVid?
 }
 
 model User {
@@ -205,7 +207,7 @@ model Review {
 }
 
 model Restaurant {
-  id     String @id @default(uuid())
+  id      String @id @default(uuid())
   adminId String
 
   createdAt DateTime @default(now())
@@ -213,7 +215,7 @@ model Restaurant {
 
   description String
 
-  user Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  user Admin  @relation(fields: [adminId], references: [id], onDelete: Cascade)
   menu Menu[]
 }
 
@@ -296,7 +298,7 @@ model Reply {
 }
 
 model ContactUs {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   adminId String?
 
   createdAt DateTime @default(now())
@@ -317,7 +319,7 @@ model ContactUs {
 
 model AppSettings {
   id      String @id @default(uuid())
-  adminId String @unique
+  adminId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -329,9 +331,7 @@ model AppSettings {
   email       String
   socialMedia Json
 
-  admin   Admin?        @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  sliders HomeSliders[]
-  mainVid PromotionVid?
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 model HomeSliders {
@@ -346,7 +346,7 @@ model HomeSliders {
   paragraph String
   isDeleted Boolean @default(false)
 
-  byAdmin AppSettings @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  byAdmin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 model PromotionVid {
@@ -359,5 +359,5 @@ model PromotionVid {
   video       String
   description String
 
-  byAdmin AppSettings @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  byAdmin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
