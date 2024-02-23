@@ -1,5 +1,5 @@
 import express from 'express';
-import { HomeSlidersController } from '../controllers/homeSliders.controllers.js';
+import { HomeSlidersController } from '../controllers/homeSliders.controller.js';
 import upload from '../middlewares/upload.js';
 
 const router = express.Router();
