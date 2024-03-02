@@ -6,21 +6,34 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  const register = (userData) => {
+    setUser(userData);
+  };
+
   const login = (userData) => {
-    // Logic for authenticating the user (e.g., making API requests)
     setUser(userData);
   };
 
   const logout = () => {
-    // Logic for logging out the user
     setUser(null);
   };
 
+  const forgetPassword = (email) => {
+  }
+
+  const resetPassword = (password) => {
+  }
+
+  const value = {user, login, logout, register, forgetPassword, resetPassword};
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={ value }>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+
+// TODO not needed in this case
