@@ -9,12 +9,11 @@ import { verifyToken } from './utilities/token.js';
 
 const app = express();
 
-app.use(cors({
-  origin: 'http://localhost:3001/'
-}));
 
 app.use(json());
 app.use(urlencoded({ extended: false }));
+
+app.use(cors());
 
 /**
  * admin route
