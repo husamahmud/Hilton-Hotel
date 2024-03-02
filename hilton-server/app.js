@@ -1,11 +1,18 @@
 import express, { json, urlencoded } from 'express';
 import { config } from 'dotenv';
+import cors from 'cors';
+
 
 config();
 
 import { verifyToken } from './utilities/token.js';
 
 const app = express();
+
+app.use(cors({
+  origin: '3000',
+}));
+
 
 app.use(json());
 app.use(urlencoded({ extended: false }));
