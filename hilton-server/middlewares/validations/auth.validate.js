@@ -6,7 +6,6 @@ export class AuthValidate {
       email: joi.string().email(),
       username: joi.string(),
       password: joi.string(),
-      confirmPassword: joi.ref('password'),
     });
     return schema.validateAsync(loginDto);
   }

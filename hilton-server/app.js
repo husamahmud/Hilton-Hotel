@@ -10,9 +10,8 @@ import { verifyToken } from './utilities/token.js';
 const app = express();
 
 app.use(cors({
-  origin: '3000',
+  origin: 'http://localhost:3001/'
 }));
-
 
 app.use(json());
 app.use(urlencoded({ extended: false }));
