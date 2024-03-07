@@ -69,7 +69,7 @@ export function Login() {
 				</div>
 
 				<div>
-					<Link to="/forgetpassword"
+					<Link to="/auth/forgetpassword"
 					      className="link">
 						Forget Password?
 					</Link>

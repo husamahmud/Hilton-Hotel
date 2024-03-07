@@ -1,5 +1,5 @@
 import {Link, useNavigate} from 'react-router-dom';
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import './SignUp.css';
 
@@ -16,6 +16,9 @@ export function SignUp() {
 	const confirmPassword = useRef(null);
 	confirmPassword.current = watch('confirmPassword', '');
 
+	const [usernameErr, setUsernameErr] = useState(false);
+    const [emailErr, setEmailErr] = useState(false);
+
 	const signup = async (data) => {
 		const url = 'http://localhost:3000/api/v1/auth/register';
 		const options = {
@@ -30,6 +33,12 @@ export function SignUp() {
 		const user = await res.json();
 		if (res.status === 200) navigate('/')
 		console.log(user);
+
+		if (res.status === 500){
+			if (user.error.includes('Username')) setUsernameErr(true)
+			else if (user.error.includes('Email')) setEmailErr(true)
+		}
+
 	};
 
 	return (
@@ -64,6 +73,7 @@ export function SignUp() {
 					       id="username"
 					       required
 					       minLength={6} {...register('username')} />
+						   <p style={{display: usernameErr? "block": "none"}} className="error">username is already in use</p>
 				</div>
 				<div style={{
 					display: 'flex',
@@ -95,6 +105,7 @@ export function SignUp() {
 					       placeholder="Email"
 					       id="email"
 					       required {...register('email')} />
+						   {emailErr === true && <p>email is already in use</p>}
 				</div>
 				<div>
 					<input type="password"
@@ -111,8 +122,7 @@ export function SignUp() {
 					       ref={confirmPassword}
 					       required
 					       minLength={6} {...register('confirmPassword')} />
-					{password.current !== confirmPassword.current &&
-						<p className="error">Passwords do not match.</p>}
+						<p style={{display:password.current !== confirmPassword.current? "block" : "none"}} className="error">Passwords do not match.</p>
 				</div>
 
 				<button type="submit">

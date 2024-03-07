@@ -1,5 +1,5 @@
-import {Link, useNavigate} from 'react-router-dom';
-import {useRef, useState} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
+import {useRef} from 'react';
 import {useForm} from 'react-hook-form';
 
 export function ResetPassword() {
@@ -10,13 +10,16 @@ export function ResetPassword() {
 		watch,
 	} = useForm();
 
+	const location = useLocation();
 	const password = useRef(null);
 	password.current = watch('password', '');
 	const confirmPassword = useRef(null);
 	confirmPassword.current = watch('confirmPassword', '');
 
 	const signin = async (data) => {
-		const url = 'http://localhost:3000/api/v1/auth/password/reset';
+		const userId = location.state.user.user.id;
+		console.log(location)
+		const url = `http://localhost:3000/api/v1/auth/password/reset/${userId}`;
 		const options = {
 			method: 'POST',
 			headers: {
