@@ -8,6 +8,8 @@ import {createToken} from '../utilities/token.js';
 import {EmailController} from './email.controller.js';
 import {hashPassword} from '../utilities/password.js';
 
+import client from '../app.js';
+
 export class AuthController {
 	static login = async (req, res) => {
 		try {
@@ -45,6 +47,11 @@ export class AuthController {
 		}
 	};
 
+
+	// fetch => response ok ! email sent // flag => true
+	// verify code => response ok ! code verified // flag2 => true
+	// return (flag != true? forget : flag2 != true verify code : reset password == > stg unique 3shan awsl ll user w y3ml reset ll password)
+
 	static forgetPassword = async (req, res) => {
 		try {
 			const user = await prisma.user.findUnique({
@@ -69,67 +76,50 @@ export class AuthController {
 		}
 	};
 
-	static resetPasswordView = async (req, res) => {
-		const {userId, token} = req.params;
-		const adminDao = new AdminDao();
-		const userDao = new UserDao();
+
+	static verifyCode = async (req, res) => {
+		const resetCode = req.body.resetCode;
+		const email = req.body.email;
+
+		console.log('resetCode', resetCode);
+
+		if (!resetCode) return res.status(400).json({message: 'Reset code is required'});
+
+		let userId;
 		try {
-			const user = await userDao.getUserById(userId);
+			const user = await prisma.user.findUnique({
+				where: {
+					email,
+				},
+			});
 			if (!user) {
-				let admin = await adminDao.findAdminById(userId);
+				const admin = await prisma.admin.findUnique({
+					where: {
+						email,
+					},
+				});
 				if (!admin) return res.status(404).json({message: 'User not found'});
+				userId = admin.id;
 			}
-			if (user) {
-				const resetToken = await prisma.resetToken.findUnique({
-					where: {
-						userId,
-					},
-				});
-				if (!resetToken) throw new Error('Token is not found');
-				if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
-				if (resetToken.token !== token) throw new Error('Invalid token');
-
-				const hashed = await hashPassword(req.body.password);
-				const updatedUser = await userDao.updateUser({
-					id: userId,
-					password: hashed,
-				});
-
-				return res.status(200).json({
-					message: 'Password updated successfully',
-					data: updatedUser,
-				});
+			else {
+				userId = user.id;
 			}
 
-			if (admin) {
-				const resetToken = await prisma.resetToken.findUnique({
-					where: {
-						adminId: userId,
-					},
-				});
-				if (!resetToken) throw new Error('Token is not found');
-				if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
-				if (resetToken.token !== token) throw new Error('Invalid token');
+			const code = await client.get(`resetCode:${userId}`);
 
-				const hashed = await hashPassword(req.body.password);
-				const updatedAdmin = await adminDao.updateAdmin({
-					id: userId,
-					password: hashed,
-				});
-				return res.status(200).json({
-					message: 'Password updated successfully',
-					data: updatedAdmin,
-				});
-			}
+			console.log('code', code);
+			if (!code) return res.status(400).json({message: 'Reset code has expired'});
+			if (code !== resetCode) return res.status(400).json({message: 'Invalid reset code'});
+
+			return res.status(200).json({message: 'Reset code verified successfully', user: user || admin});
 		} catch (e) {
 			console.error(e);
 			return res.status(500).json({error: e.message || 'Internal server error'});
 		}
-	};
+	}
 
 	static resetPassword = async (req, res) => {
-		const {userId, token} = req.params;
-		if (!req.body) res.redirect(`http://localhost:3001/auth/resetpassword?id=${userId}&token=${token}`)
+		const userId = req.params.userId; // TODO when redirecting  include userId from response
 		const adminDao = new AdminDao();
 		const userDao = new UserDao();
 		if (req.body.password !== req.body.confirmPassword) return res.status(400).json({message: 'Passwords do not match'});
@@ -140,15 +130,6 @@ export class AuthController {
 				if (!admin) return res.status(404).json({message: 'User not found'});
 			}
 			if (user) {
-				const resetToken = await prisma.resetToken.findUnique({
-					where: {
-						userId,
-					},
-				});
-				if (!resetToken) throw new Error('Token is not found');
-				if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
-				if (resetToken.token !== token) throw new Error('Invalid token');
-
 				const hashed = await hashPassword(req.body.password);
 				const updatedUser = await userDao.updateUser({
 					id: userId,
@@ -162,15 +143,6 @@ export class AuthController {
 			}
 
 			if (admin) {
-				const resetToken = await prisma.resetToken.findUnique({
-					where: {
-						adminId: userId,
-					},
-				});
-				if (!resetToken) throw new Error('Token is not found');
-				if (resetToken.expireAt < new Date()) throw new Error('Token has expired');
-				if (resetToken.token !== token) throw new Error('Invalid token');
-
 				const hashed = await hashPassword(req.body.password);
 				const updatedAdmin = await adminDao.updateAdmin({
 					id: userId,

@@ -1,6 +1,7 @@
 import express, { json, urlencoded } from 'express';
 import { config } from 'dotenv';
 import cors from 'cors';
+import { createClient } from 'redis';
 
 
 config();
@@ -17,13 +18,13 @@ app.use(cors());
 
 /**
  * admin route
- **/
+**/
 import adminRouter from './routes/admin.route.js';
 app.use('/api/v1/admin', verifyToken, adminRouter);
 
 /**
  * auth route
- **/
+**/
 import authRouter from './routes/auth.route.js';
 app.use('/api/v1/auth', authRouter);
 
@@ -35,13 +36,13 @@ app.use('/api/v1/user', verifyToken, userRoute);
 
 /**
  * room route
- **/
+**/
 import roomRoute from './routes/room.route.js';
 app.use('/api/v1/room', verifyToken, roomRoute);
 
 /**
  * room reservation route
- **/
+**/
 import roomReservationRoute from './routes/roomResevation.route.js';
 app.use('/api/v1/roomreservation', verifyToken, roomReservationRoute);
 
@@ -53,31 +54,31 @@ app.use('/api/v1/menu', verifyToken, menuRoute);
 
 /**
  * resturant route
- **/
+**/
 import restaurantRoute from './routes/restaurant.route.js';
 app.use('/api/v1/restaurant', verifyToken, restaurantRoute);
 
 /**
  * news route
- **/
+**/
 import newsRoute from './routes/news.route.js';
 app.use('/api/v1/news', verifyToken, newsRoute);
 
 /**
  * reply route
- **/
+**/
 import replyRoute from './routes/reply.route.js';
 app.use('/api/v1/reply', verifyToken, replyRoute);
 
 /**
  * clubHouse route
- **/
+**/
 import clubHouseRoute from './routes/clubHouse.route.js';
 app.use('/api/v1/clubHouse', verifyToken, clubHouseRoute);
 
 /**
  * contactUs route
- **/
+**/
 import contactUsRoute from './routes/contactUs.route.js';
 app.use('/api/v1/contact', verifyToken, contactUsRoute);
 
@@ -89,19 +90,19 @@ app.use('/api/v1/settings', verifyToken, appSettingsRoute);
 
 /**
  * review route
- **/
+**/
 import reviewRoute from './routes/review.route.js';
 app.use('/api/v1/review', verifyToken, reviewRoute);
 
 /**
  * extra services route
- **/
+**/
 import extraServicesRoute from './routes/extraServices.route.js';
 app.use('/api/v1/extraservices', verifyToken, extraServicesRoute);
 
 /**
  * faqs route
- **/
+**/
 import faqsRoute from './routes/faqs.route.js';
 app.use('/api/v1/faqs', verifyToken, faqsRoute);
 
@@ -113,7 +114,7 @@ app.use('/api/v1/sliders', verifyToken, homeSlidersRoute);
 
 /**
  * promoVideo route
- **/
+**/
 import promoVidRoute from './routes/promoVid.route.js';
 app.use('/api/v1/promovid',verifyToken, promoVidRoute);
 
@@ -121,6 +122,13 @@ app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
 
+const client = await createClient()
+  .on('error', err => console.log('Redis Client Error', err))
+  .connect();
+
+
 app.listen(process.env.PORT, () => {
   console.log(`we are live at .. http://localhost:${process.env.PORT}`);
 });
+
+export default client;

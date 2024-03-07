@@ -26,7 +26,11 @@ router
   .post(AuthController.forgetPassword);
 
 router
-  .route('/password/reset/:userId/:token')
+  .route('/code/verify')
+  .post(AuthController.verifyCode);
+
+router
+  .route('/password/reset/:userId')
   .post(AuthController.resetPassword);
 
 router

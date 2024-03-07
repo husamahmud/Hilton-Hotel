@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import Joi from 'joi';
 import prisma from '../models/prisma/prisma-client.js';
 import { createToken } from '../utilities/token.js';
-
+import client from "../app.js"
 export class EmailController {
   static sendEmailConfirmation = async (req, res, type) => {
     const email = req.body.email;
@@ -37,6 +37,7 @@ export class EmailController {
         if (!userObj) return res.status(400).json({ error: 'User is not found' });
       }
     }
+    let resetCode = Math.floor(100000 + Math.random() * 900000);
     const userId = userObj.id;
     let token = createToken(userObj, '15m');
     if (type === 'CONFIRM') {
@@ -58,23 +59,7 @@ export class EmailController {
         });
       }
     } else if (type === 'RESET') {
-      if (userObj.role === 'ADMIN') {
-        await prisma.resetToken.create({
-          data: {
-            token,
-            adminId: userId,
-            expireAt: new Date(Date.now() + 15 * 60 * 1000),
-          },
-        });
-      } else {
-        await prisma.resetToken.create({
-          data: {
-            token,
-            userId: userId,
-            expireAt: new Date(Date.now() + 15 * 60 * 1000),
-          },
-        });
-      }
+      await client.set(`resetCode:${userObj.id}`,resetCode);
     }
 
     let endpoint;
@@ -115,11 +100,9 @@ export class EmailController {
           `<div>
             <h4>Dear ${userObj.username}</h4>,
             <p>
-              Hope This mail finds you will, You can Follow This Link to Reset Your Password:
+              Hope This mail finds you will, You can use this code to reset your password:
               <br>
-              URL: ${url}
-              <br>
-              Note: This link will be valid for 15 minutes from the time of receipt.
+              code: ${resetCode}
               <br>
               <b>If you have not asked for resetting password or believe this email was sent by mistake, please disregard it.</b>
             </p>
@@ -127,7 +110,7 @@ export class EmailController {
       });
       console.log('Email sent successfully');
     } catch (e) {
-      throw new Error('Error from Send Email' + e.message);
+      throw new Error('Error from Send Email ' + e.message);
     }
   };
 
@@ -158,9 +141,11 @@ export class EmailController {
         },
       });
 
-      return res.status(200).json({
-        status: 'Email confirmed successfully', data: updatedUser,
-      });
+      return res.send(`
+      <script>
+          window.location.href = 'http://localhost:3001/';
+      </script>
+  `)
     } catch (e) {
       throw new Error('Error from UserConfirmation ' + e.message);
     }
@@ -191,9 +176,11 @@ export class EmailController {
         },
       });
 
-      return res.status(200).json({
-        data: updatedAdmin, status: 'Email confirmed successfully',
-      });
+      return res.send(`
+                <script>
+                    window.location.href = 'http://localhost:3001/';
+                </script>
+            `)
     } catch (error) {
       console.error(error.message);
       return res.status(500).json({ error: error.message });
