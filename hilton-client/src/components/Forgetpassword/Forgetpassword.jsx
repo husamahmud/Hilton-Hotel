@@ -1,12 +1,10 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import './Login.css';
 
-export function Login() {
+export function ForgetPassword() {
 	const [emailError, setEmailError] = useState(null);
-	const [passwordError, setPasswordError] = useState(null);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const {
 		register: login,
@@ -14,11 +12,7 @@ export function Login() {
 	} = useForm()
 
 	const signin = async (data) => {
-		if (!data.email.includes('@')) {
-			data.username = data.email;
-			delete data.email;
-		}
-		const url = 'http://localhost:3000/api/v1/auth/login';
+		const url = 'http://localhost:3000/api/v1/auth/password/forget';
 		const options = {
 			method: 'POST',
 			headers: {
@@ -31,56 +25,42 @@ export function Login() {
 		if (!res.ok) {
 			const errorsData = await res.json();
 			if (errorsData.error === 'User is not found') setEmailError(errorsData.error);
-			else if (errorsData.error === 'Password is not correct') setPasswordError(errorsData.error);
 			else console.log(errorsData.error);
 		} else {
 			setEmailError(null)
-			setPasswordError(null)
 			const user = await res.json();
-			navigate('/');
+			// navigate('/');
 			console.log(user);
 		}
 	}
 
 	return (
 		<div className="login">
-			<div className='title'>
-				<h2>Welcome!</h2>
-				<p>We are delighted to have you back!</p>
+			<div className="title">
+				<h2>Forget Password</h2>
+				<p>Please enter your email!</p>
 			</div>
 
 			<form className="login-form"
 			      onSubmit={handleSubmit(signin)}>
 				<div>
 					<input type="text"
-					       placeholder="Email or Username"
-					       id="emailorusername"
+					       placeholder="Email"
+					       id="email"
 					       required
-					       {...login('email' || 'username')} />
+					       {...login('email')} />
 					{emailError && <p>{emailError}</p>}
 				</div>
-				<div>
-					<input type="password"
-					       placeholder="Password"
-					       id="password"
-					       required
-					       minLength={6} {...login('password')} />
-					{passwordError && <p>{passwordError}</p>}
-				</div>
 
 				<div>
-					<Link to="/forgetpassword"
-					      className="link">
-						Forget Password?
-					</Link>
-					<Link to="/auth/register"
+					<Link to="/auth/login"
 					      className="link"
 					      style={{color: '#aa8453'}}>
-						Sign up
+						Sign In
 					</Link>
 				</div>
 
-				<button type="submit">Login</button>
+				<button type="submit">Submit</button>
 			</form>
 		</div>
 	)

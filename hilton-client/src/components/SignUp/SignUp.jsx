@@ -1,8 +1,10 @@
+import {Link, useNavigate} from 'react-router-dom';
 import {useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import './SignUp.css';
 
 export function SignUp() {
+	const navigate = useNavigate();
 	const {
 		register,
 		handleSubmit,
@@ -26,26 +28,30 @@ export function SignUp() {
 
 		const res = await fetch(url, options);
 		const user = await res.json();
+		if (res.status === 200) navigate('/')
 		console.log(user);
 	};
 
 	return (
-		<>
-			<h1>Signup</h1>
+		<div className="signup">
+			<div className="title">
+				<h2>Sign Up</h2>
+				<p>We're lucky having you in our extended family!</p>
+			</div>
 
 			<form className="signup-form"
 			      onSubmit={handleSubmit(signup)}>
 				<div className="name">
 					<div>
-						<label htmlFor="fName">First Name</label>
 						<input type="text"
 						       id="fName"
+						       placeholder="First Name"
 						       required
 						       minLength={3} {...register('fName')} />
 					</div>
 					<div>
-						<label htmlFor="lName">Last Name</label>
 						<input type="text"
+						       placeholder="Last Name"
 						       id="lName"
 						       required
 						       minLength={3} {...register('lName')} />
@@ -53,61 +59,77 @@ export function SignUp() {
 					</div>
 				</div>
 				<div> {/* TODO: validate the username is not used */}
-					<label htmlFor="username">username</label>
 					<input type="text"
+					       placeholder="username"
 					       id="username"
 					       required
 					       minLength={6} {...register('username')} />
 				</div>
-				<div>
+				<div style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center'
+				}}>
 					<label htmlFor="birthDate">Birth Date</label>
 					<input type="date"
 					       id="birthDate"
 					       required {...register('birthDate')} />
 				</div>
 				<div>
-					<label htmlFor="country">Country</label>
 					<input type="text"
+					       placeholder="Country"
 					       id="country"
 					       required
 					       minLength={4} {...register('country')} />
 				</div>
 				<div>
-					<label htmlFor="nationalID">National ID</label>
 					<input type="text"
+					       placeholder="National ID"
 					       id="nationalID"
 					       required
 					       minLength={9} {...register('nationalID')} />
 				</div>
 				<div> {/* TODO: validate the email is not used */}
-					<label htmlFor="email">Email</label>
 					<input type="email"
+					       placeholder="Email"
 					       id="email"
 					       required {...register('email')} />
 				</div>
 				<div>
-					<label htmlFor="password">Password</label>
 					<input type="password"
+					       placeholder="Password"
 					       id="password"
 					       ref={password}
 					       required
 					       minLength={6} {...register('password')} />
 				</div>
 				<div>
-					<label htmlFor="confirmPassword">Confirm Password</label>
 					<input type="password"
+					       placeholder="Confirm Password"
 					       id="confirmPassword"
 					       ref={confirmPassword}
 					       required
 					       minLength={6} {...register('confirmPassword')} />
 					{password.current !== confirmPassword.current &&
-						<p>Passwords do not match.</p>}
+						<p className="error">Passwords do not match.</p>}
 				</div>
 
 				<button type="submit">
 					Sign Up
 				</button>
+
+				<div className="login-btn">
+					<p>
+						Already have an account?
+					</p>
+					<Link to="/auth/login"
+					      className="link"
+					      style={{color: '#aa8453'}}>
+						Login
+					</Link>
+				</div>
 			</form>
-		</>
+		</div>
 	);
 }
