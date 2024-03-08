@@ -1,5 +1,4 @@
 import prisma from '../prisma/prisma-client.js';
-import { UserDao } from './user.dao.js';
 
 
 export class AdminDao {
@@ -8,8 +7,12 @@ export class AdminDao {
     if (field === 'email') query = { where: { email: element } }; else if (field === 'phoneNum') query = { where: { phoneNum: element } }; else if (field === 'username') query = { where: { username: element } };
 
     const existingAdmin = await prisma.admin.findUnique(query);
-    if (existingAdmin) {
-      throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone number'} is already in use!`);
+    let existingUser
+    if (field !== 'phoneNum') {
+      existingUser = await prisma.user.findUnique(query);
+    }
+      if (existingAdmin || existingUser) {
+      throw new Error(`${field === 'email' ? 'Email' : field === 'username' ? 'Username' : 'Phone Number'} is already in use!`);
     }
   };
 
@@ -17,6 +20,11 @@ export class AdminDao {
     await this.isExisted(adminDto.email, 'email');
     await this.isExisted(adminDto.phoneNum, 'phoneNum');
     await this.isExisted(adminDto.username, 'username');
+
+    const today = new Date();
+    const birthDate = new Date(userDto.birthDate);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    if (age < 18) throw new Error('You must be at least 18 years old');
 
     const newAdmin = await prisma.admin.create({
       data: adminDto,

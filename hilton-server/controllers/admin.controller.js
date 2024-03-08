@@ -9,14 +9,15 @@ import path from 'path';
 
 export class AdminController {
   static createAdmin = async (req, res) => {
+    req.body.password = await hashPassword(req.body.password);
+    req.body.birthDate = new Date(req.body.birthDate);
+    if (req.file) req.body.profilePic = req.file.path;
+
+    const adminDto = new AdminDto(req.body);
+    const adminDao = new AdminDao();
+
+    console.log(adminDto)
     try {
-      req.body.password = await hashPassword(req.body.password);
-      req.body.birthDate = new Date(req.body.birthDate);
-      if (req.file) req.body.profilePic = req.file.path;
-
-      const adminDto = new AdminDto(req.body);
-      const adminDao = new AdminDao();
-
       const { error } = await AdminValidation.createAdmin(adminDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -27,6 +28,7 @@ export class AdminController {
         message: 'Email Sent and Admin created Successfully ', data: admin,
       });
     } catch (e) {
+      console.log(e)
       return res.status(500).json({ error: e.message || 'Internal server error' });
     }
   };
