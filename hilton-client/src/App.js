@@ -1,7 +1,7 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import AuthRoutes from './routes/AuthRoutes.js';
-import {Home} from './components/Home/Home';
+import React from "react";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import AuthRoutes from "./routes/AuthRoutes.js";
+import Main from "./components/Main/Main"
 
 function App() {
 	return (
@@ -9,8 +9,8 @@ function App() {
 			<Routes>
 				<Route path="/auth/*"
 				       element={<AuthRoutes />} />
-				<Route path="/"
-				       element={<Home />} />
+				<Route path="/*"
+				       element={<Main />} />
 			</Routes>
 		</Router>
 	);

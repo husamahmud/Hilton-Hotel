@@ -1,0 +1,111 @@
+.main {
+	aside {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 30%;
+		height: 100vh;
+		padding: 60px 40px;
+
+		.logo {
+			text-align: center;
+			margin-bottom: 3rem;
+			display: block;
+			text-decoration: none;
+
+			.stars {
+				padding: .5rem;
+
+				span {
+					color: var(--primary-color);
+				}
+			}
+
+			h2 {
+				font-family: 'Gilda Display', serif;
+				color: var(--primary-color);
+				text-transform: uppercase;
+				font-weight: 100;
+				letter-spacing: 2px;
+			}
+
+			span {
+				font-size: 14px;
+				color: white;
+				text-transform: uppercase;
+				letter-spacing: 6px;
+				font-weight: 100;
+			}
+		}
+
+		nav {
+			margin-bottom: 5rem;
+
+			ul {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+
+				li {
+					padding: 10px 20px;
+
+					button {
+						border: none;
+						background-color: transparent;
+						color: var(--tertiary-color);
+						cursor: pointer;
+						font-size: 14px;
+						transition: color .2s ease-in-out;
+						width: 100%;
+						text-transform: uppercase;
+						letter-spacing: 1px;
+						line-height: 1.25em;
+						text-align: left;
+
+						&:hover {
+							color: var(--primary-color);
+						}
+					}
+				}
+			}
+		}
+
+		.reservation {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 180px;
+
+			.icon {
+				font-size: 36px;
+				color: var(--primary-color);
+			}
+
+			.text {
+				text-align: left;
+				color: var(--tertiary-color);
+				font-size: 15px;
+				letter-spacing: 1px;
+				font-weight: 100;
+
+				p {
+					margin-bottom: 5px;
+				}
+
+				a {
+					display: block;
+					font-size: 15px;
+					letter-spacing: 2px;
+					font-weight: 400;
+					color: var(--primary-color);
+				}
+			}
+		}
+	}
+
+	.main-content {
+		width: 70%;
+		float: right;
+		height: 300vh;
+	}
+}
