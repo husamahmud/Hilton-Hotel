@@ -15,7 +15,7 @@ export class UserController {
       if (req.file) req.body.profilePic = req.file.path;
       const userDto = new UserDto(req.body);
       const userDao = new UserDao();
-
+    
       const { error } = await UserValidate.createUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 

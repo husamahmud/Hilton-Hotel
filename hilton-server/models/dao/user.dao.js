@@ -18,11 +18,17 @@ export class UserDao {
     await this.isExisted(userDto.nationalID, 'nationalID');
     await this.isExisted(userDto.username, 'username');
 
+    const today = new Date();
+    const birthDate = new Date(userDto.birthDate);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    if (age < 18) throw new Error('You must be at least 18 years old');
+
     const newUser = await prisma.user.create({
       data: userDto,
     });
     return newUser;
   };
+
 
   getAllUsers = async () => {
     const users = await prisma.user.findMany({
