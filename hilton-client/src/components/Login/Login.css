@@ -21,13 +21,13 @@ body {
             text-align: center;
         }
 
-        p {
-            font-size: 13px;
-            padding: .5rem;
-            text-align: center;
-            color: #b5a38c;
-        }
     }
+}
+.error {
+    font-size: 13px;
+    padding: .2rem;
+    text-align: center;
+    color: #b5a38c;
 }
 
 .login-form {

@@ -88,12 +88,12 @@ body {
             font-family: "Barlow", sans-serif;
         }
 
-        .error {
-            color: rgb(220 38 38);
-            font-size: 0.8rem;
-        }
 
     }
+.error {
+    color: rgb(220 38 38);
+    font-size: 0.8rem;
+}
 
     .login-btn {
         display: flex;
