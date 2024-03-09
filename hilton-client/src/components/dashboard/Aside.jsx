@@ -1,14 +1,9 @@
-import { useState } from "react";
 import React from "react";
 import "./dashboard.css";
 
 export function Aside() {
 
     const currentUrl = window.location.href;
-
-    // window href
-
-
 
     return (
         <aside className="dashboard_aside">

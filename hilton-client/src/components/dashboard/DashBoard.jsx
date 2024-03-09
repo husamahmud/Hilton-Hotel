@@ -1,11 +1,5 @@
-
-import { Children } from 'react';
 import {Aside} from './Aside';
-
 import "./dashboard.css";
-import { UsersDash } from './Users';
-import { ReservationsDash } from './Reservations';
-import { NewsDash } from './News';
 
 
 export function DashBoard() {
