@@ -20,6 +20,8 @@ export class AuthController {
 			if (error) return res.status(400).json({message: error.details[0].message});
 
 			const user = await authDao.login(loginDto);
+			console.log('object')
+			console.log(user)
 			const token = createToken(user, '3d');
 
 			if (req.body.isRemember) {

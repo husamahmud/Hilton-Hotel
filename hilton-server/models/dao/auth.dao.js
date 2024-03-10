@@ -35,6 +35,7 @@ export class AuthDao {
           },
         });
       }
+    }
 
     if (!user && !admin) {
       throw new Error('User is not found');
@@ -50,4 +51,3 @@ export class AuthDao {
     return target;
   };
 }
-
