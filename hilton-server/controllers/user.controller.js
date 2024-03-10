@@ -30,6 +30,7 @@ export class UserController {
         email: user.email,
         username: user.username,
         role: user.role,
+        isDeleted: user.isDeleted,
       };
       return res.status(200).json({
         message: 'User created successfully',
