@@ -14,6 +14,7 @@ export function Login() {
       data.username = data.email;
       delete data.email;
     }
+    console.log(data)
     const url = "http://localhost:3000/api/v1/auth/login";
     const options = {
       method: "POST",
@@ -35,8 +36,10 @@ export function Login() {
     } else if (res.status === 200) {
       setLoginError(null);
       const user = await res.json();
+      localStorage.setItem("user", JSON.stringify(user.data));
+      localStorage.setItem("token", JSON.stringify(user.token));
+      console.log('hey', user);
       navigate("/");
-      console.log(user);
     }
   };
 
