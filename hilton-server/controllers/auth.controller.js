@@ -15,6 +15,12 @@ export class AuthController {
 		const loginDto = new LoginDto(req.body);
 		const authDao = new AuthDao()
 		console.log(loginDto)
+		if (req.body.email.includes('@')) {
+		        loginDto.email = req.body.email;
+		      } else {
+		        loginDto.username = req.body.email;
+		      }
+
 		try {
 			const {error} = await AuthValidate.login(loginDto);
 			if (error) return res.status(400).json({message: error.details[0].message});
@@ -40,6 +46,7 @@ export class AuthController {
 				email: user.email,
 				username: user.username,
 				role: user.role,
+				isDeleted: user.isDeleted,
 			};
 
 			res.setHeader('token', `Bearer ${token}`);
@@ -197,4 +204,18 @@ export class AuthController {
 			return res.status(500).json({error: e.message || 'Internal server error'});
 		}
 	};
+
+	static logout = async (req, res) => {
+	    try {
+	      await prisma.refreshToken.deleteMany({
+	        where: {
+	          userId: req.user.id,
+	        },
+	      });
+	      return res.status(200).json({ message: 'User logged out successfully' });
+	    } catch (e) {
+	      console.error(e);
+	      return res.status(500).json({ error: e.message || 'Internal server error' });
+	    }
+	  };
 }
