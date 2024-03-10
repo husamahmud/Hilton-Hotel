@@ -34,9 +34,9 @@ export class AuthDao {
         });
       }
       if (!admin) throw new Error('User is not found');
-      else isPasswordMatch = await comparePasswords(userDto.password, admin.password);
+      else isPasswordMatch = comparePasswords(userDto.password, admin.password);
     } else {
-      isPasswordMatch = await comparePasswords(userDto.password, user.password);
+      isPasswordMatch = comparePasswords(userDto.password, user.password);
     }
 
     if (!isPasswordMatch) throw new Error('Password is not correct');
