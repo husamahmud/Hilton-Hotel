@@ -2,8 +2,11 @@ import prisma from '../prisma/prisma-client.js';
 import { comparePasswords } from '../../utilities/password.js';
 
 export class AuthDao {
-  static login = async (userDto) => {
+
+  login = async (userDto) => {
     let user;
+    let admin;
+
     if (userDto.email) {
       user = await prisma.user.findUnique({
         where: {
@@ -17,8 +20,7 @@ export class AuthDao {
         },
       });
     }
-    let isPasswordMatch;
-    let admin;
+
     if (!user) {
       if (userDto.email) {
         admin = await prisma.admin.findUnique({
@@ -33,13 +35,19 @@ export class AuthDao {
           },
         });
       }
-      if (!admin) throw new Error('User is not found');
-      else isPasswordMatch = comparePasswords(userDto.password, admin.password);
-    } else {
-      isPasswordMatch = comparePasswords(userDto.password, user.password);
+
+    if (!user && !admin) {
+      throw new Error('User is not found');
     }
 
-    if (!isPasswordMatch) throw new Error('Password is not correct');
-    return user || admin;
+    const target = user || admin;
+    const isPasswordMatch = comparePasswords(userDto.password, target.password);
+
+    if (!isPasswordMatch) {
+      throw new Error('Password is not correct');
+    }
+
+    return target;
   };
 }
+

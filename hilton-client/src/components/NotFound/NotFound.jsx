@@ -1,8 +1,8 @@
-export function NotFound() {
+export function NotFound () {
     return (
         <div>
-        <h1>Not Found</h1>
-        <p>if you think something is wrong please contact @hiltonhotel.organization@gmail.com</p>
+            <h1>Not Found</h1>
+            <p>If you think something is wrong please contact the support @hiltonhotel.organization@gmail.com</p>
         </div>
-    );
+    )
 }

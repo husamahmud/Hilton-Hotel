@@ -6,6 +6,7 @@ import { EmailController } from './email.controller.js';
 import { validateUserId } from '../utilities/Id_validations/users.id.validation.js';
 import fs from 'fs';
 import path from 'path';
+import { createToken } from '../utilities/token.js';
 export class UserController {
   static createUser = async (req, res) => {
     try {
@@ -15,13 +16,15 @@ export class UserController {
       if (req.file) req.body.profilePic = req.file.path;
       const userDto = new UserDto(req.body);
       const userDao = new UserDao();
-    
+
       const { error } = await UserValidate.createUser(userDto);
       if (error) return res.status(400).json({ message: error.details[0].message });
 
       const user = await userDao.createUser(userDto);
       await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
+      const token = createToken(user, '3d');
+      res.setHeader('token', `Bearer ${token}`);
       req.user = {
         id: user.id,
         email: user.email,

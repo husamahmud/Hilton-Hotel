@@ -7,6 +7,7 @@ export function AdminRoutes() {
   const adminRole = user && JSON.parse(user).role === "ADMIN";
 
   return token && adminRole ? <Outlet /> : <Navigate to="/error/notfound" />;
+
 }
 
 // for Add => reservation, restaurant, clubhouse, news, reviews
