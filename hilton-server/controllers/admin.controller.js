@@ -25,6 +25,14 @@ export class AdminController {
       const admin = await adminDao.createAdmin(adminDto);
       await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
+       req.user = {
+        id: admin.id,
+        email: admin.email,
+        username: admin.username,
+        role: admin.role,
+        isDeleted: admin.isDeleted,
+      };
+      
       const token = createToken(admin, '3d');
       res.setHeader('token', `Bearer ${token}`);
       return res.status(200).json({
