@@ -36,9 +36,8 @@ export function Login() {
     } else if (res.status === 200) {
       setLoginError(null);
       const user = await res.json();
+      localStorage.setItem("token", user.token);
       localStorage.setItem("user", JSON.stringify(user.data));
-      localStorage.setItem("token", JSON.stringify(user.token));
-      console.log('hey', user);
       navigate("/");
     }
   };

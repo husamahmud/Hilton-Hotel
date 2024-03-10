@@ -4,7 +4,7 @@ import AuthRoutes from "./routes/AuthRoutes.js";
 import { Home } from "./components/Home/Home";
 import { DashBoardRoutes } from "./routes/DashBoard.js";
 import { NotFound } from "./components/NotFound/NotFound.jsx";
-import {AdminRoutes} from "./routes/ProtectedRoutes.js";
+import { AdminRoutes } from "./routes/ProtectedRoutes.js";
 
 function App() {
   return (
