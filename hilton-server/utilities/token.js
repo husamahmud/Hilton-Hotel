@@ -1,14 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { createToken } from '../utilities/token.js';
 import { AuthController } from '../controllers/auth.controller.js';
 
-export const createToken = (dto, duration) => {
+const createToken = (dto, duration) => {
 	return jwt.sign({
 		id: dto.id, email: dto.email, role: dto.role
 	}, process.env.TOKEN_SECRET, {expiresIn: duration})
 }
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader?.split(' ')[1];
 
@@ -70,3 +69,5 @@ export const verifyToken = (req, res, next) => {
     }
   }
 };
+
+export { createToken, verifyToken };
