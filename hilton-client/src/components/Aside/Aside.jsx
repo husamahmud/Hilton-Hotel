@@ -1,6 +1,5 @@
 import {useNavigate} from "react-router-dom";
-
-const Star = () => <span className="material-symbols-rounded star">star</span>;
+import Star from "../Constant/Star";
 
 export default function Aside({links}) {
 	const navigate = useNavigate();
@@ -8,7 +7,7 @@ export default function Aside({links}) {
 	return (
 		<aside>
 			<a className="logo"
-			   href="/home">
+			   href="/">
 				<div className="stars">
 					<Star />
 					<Star />

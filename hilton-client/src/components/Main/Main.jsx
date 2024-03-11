@@ -7,7 +7,7 @@ import "./Main.css"
 import "normalize.css"
 
 const links = [
-	{path: "/home", title: "Home", component: Home},
+	{path: "/", title: "Home", component: Home},
 	{path: "/about", title: "About", component: About},
 	{path: "/rooms", title: "Rooms & Suites", component: "Rooms"},
 	{path: "/restaurant", title: "Restaurant", component: "Restaurant"},
@@ -23,7 +23,7 @@ export default function Main() {
 
 			<div className="main-content">
 				<Routes>
-					<Route path="/home"
+					<Route path="/"
 					       element={<Home />} />
 					<Route path="/about"
 					       element={<About />} />

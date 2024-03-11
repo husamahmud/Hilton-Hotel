@@ -3,9 +3,9 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 30%;
+		width: 20%;
 		height: 100vh;
-		padding: 60px 40px;
+		padding: 60px 30px;
 
 		.logo {
 			text-align: center;
@@ -104,8 +104,83 @@
 	}
 
 	.main-content {
-		width: 70%;
+		min-width: 80%;
 		float: right;
-		height: 300vh;
+
+		& > div {
+			background-image: url("slider.jpg");
+			background-size: cover;
+			height: 100vh;
+		}
+
+		.home {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			gap: 1rem;
+
+			.star {
+				font-size: 28px;
+				color: #e4a853;
+				text-transform: uppercase;
+			}
+
+			.welcome-text {
+				max-width: 700px;
+
+				p {
+					text-transform: uppercase;
+					font-weight: 100;
+					letter-spacing: 3px;
+				}
+
+				h1 {
+					font-family: 'Gilda Display', serif;
+					font-size: 55px;
+					font-weight: 400;
+					letter-spacing: 10px;
+					text-transform: uppercase;
+					line-height: 1.35em;
+					color: #fff;
+				}
+
+				button {
+					position: relative;
+					width: 200px;
+					height: 50px;
+					background-color: transparent;
+					border: 1px solid white;
+					color: white;
+					cursor: pointer;
+					font-weight: 400;
+					overflow: hidden;
+					transform: perspective(1px) translateZ(0);
+					transition-duration: 0.3s;
+				}
+
+				button:before {
+					content: "";
+					position: absolute;
+					background-color: white;
+					z-index: -1;
+					top: 0;
+					left: 0;
+					width: 0;
+					height: 100%;
+					transition-duration: 0.3s;
+
+				}
+
+				button:hover {
+					color: var(--secondary-color);
+				}
+
+				button:hover::before {
+					width: 100%;
+				}
+			}
+		}
 	}
 }
