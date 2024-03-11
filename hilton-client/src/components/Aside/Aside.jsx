@@ -1,11 +1,11 @@
 import {useNavigate} from "react-router-dom";
 import Star from "../Constant/Star";
 
-export default function Aside({links}) {
+export default function Aside({links, isOpen}) {
 	const navigate = useNavigate();
 
 	return (
-		<aside>
+		<aside className={`${isOpen ? "asideOpen" : ""}`}>
 			<a className="logo"
 			   href="/">
 				<div className="stars">
