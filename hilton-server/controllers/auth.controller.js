@@ -15,11 +15,11 @@ export class AuthController {
 		const loginDto = new LoginDto(req.body);
 		const authDao = new AuthDao()
 		console.log(loginDto)
-		if (req.body.email.includes('@')) {
-		        loginDto.email = req.body.email;
-		      } else {
-		        loginDto.username = req.body.email;
-		      }
+		// if (req.body.email.includes('@')) {
+		//         loginDto.email = req.body.email;
+		//       } else {
+		//         loginDto.username = req.body.email;
+		//       }
 
 		try {
 			const {error} = await AuthValidate.login(loginDto);
