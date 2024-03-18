@@ -7,6 +7,7 @@ export function PromoVideoSettings() {
   const { register, handleSubmit } = useForm();
 
   const [promoVid, setPromoVid] = useState(null);
+  const [promoVidId, setPromoVidId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -32,13 +33,41 @@ export function PromoVideoSettings() {
     const fetchData = async () => {
       const fetchedPromoVid = await getPromotionVid();
 
+      setPromoVidId(fetchedPromoVid.promoVids[0].id);
       setPromoVid(fetchedPromoVid);
     };
 
     fetchData();
   }, []);
+
   const updatePromoVid = async (data) => {
-    console.log(data);
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    const adminId = JSON.parse(user).id;
+    const url = `http://localhost:3000/api/v1/promovid/${promoVidId}`;
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        video: data.video,
+        description: data.description,
+        adminId,
+      }),
+    };
+    const response = await fetch(url, options);
+    const result = await response.json();
+    console.log(result);
+
+    if (response.status === 200) {
+      alert("Promo Video Updated Successfully");
+    }
+    if (response.status === 500) {
+      alert(result.error);
+    }
   };
 
   return (
@@ -46,27 +75,28 @@ export function PromoVideoSettings() {
       <h1>Promo Video Settings</h1>
       {promoVid && (
         <form className="promoVid" onSubmit={handleSubmit(updatePromoVid)}>
-          <div>
+          <div className="formGroup">
             <label htmlFor="video">Video</label>
-            <div>{promoVid.video}</div>
+            {/* <div>{promoVid.promoVids[0].video}</div> */}
             <input
               type="photo"
               id="video"
               minLength={3}
+              placeholder={promoVid.promoVids[0].video}
               {...register("video")}
             />
           </div>
-          <div>
+          <div className="formGroup">
             <label htmlFor="description">Description</label>
             <input
               type="text"
-              placeholder={promoVid.description}
+              placeholder={promoVid.promoVids[0].description}
               id="description"
               minLength={20}
               {...register("description")}
             />
           </div>
-          <div>
+          <div className="settingsBtns">
             <button type="submit">Update</button>
             <button type="reset">Reset</button>
           </div>

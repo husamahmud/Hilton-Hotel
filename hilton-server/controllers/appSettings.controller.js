@@ -11,9 +11,12 @@ export class SettingsController {
         const settingsDao = new SettingsDao();
         settingsDto.adminId = req.user.id;
 
+        if (req.file) settingsDto.logo = req.file.path;
+        if (req.body.socialMedia) settingsDto.socialMedia = JSON.parse(req.body.socialMedia);
+
         try {
 
-            await validateAdminId(req.user.id); // TODO - req.user
+            await validateAdminId(req.user.id);
 
             const { error } = await SettingsValidate.createSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
@@ -41,6 +44,9 @@ export class SettingsController {
         const settingsDao = new SettingsDao();
 
         if (req.file) settingsDto.logo = req.file.path;
+        else delete settingsDto.logo;
+
+        console.log("object from backend", settingsDto);
 
         try {
 
@@ -60,6 +66,7 @@ export class SettingsController {
             const updatedSettings = await settingsDao.updateSettings(settingsDto);
             res.status(200).json({ message: "Settings updated successfully", data: updatedSettings });
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: error.message });
         }
     }

@@ -63,11 +63,12 @@ export class HomeSlidersController {
     static updateSlider = async (req, res) => {
         const sliderDto = new HomeSlidersDto(req.body);
         if (req.file) sliderDto.photo = req.file.path;
+        else delete sliderDto.photo ;
 
         const sliderDao = new HomeSliderDao();
+        sliderDto.id = req.params.sliderId;
 
         try {
-
             await validateAdminId(sliderDto.adminId);
 
             const slider = await sliderDao.getSliderById(sliderDto.id);
@@ -86,6 +87,7 @@ export class HomeSlidersController {
             return res.status(200).json({ message: 'Slider updated successfully', updatedSlider });
 
         } catch (error) {
+            console.log(error)
             return res.status(500).json({ error: error.message });
         }
     }

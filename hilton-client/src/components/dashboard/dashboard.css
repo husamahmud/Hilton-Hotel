@@ -1,13 +1,12 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
 }
 
 .dashboard_aside {
-  width: 15%;
+  width: 15vw;
   height: 100vh;
   background-color: #8a6d3b;
   position: fixed;
@@ -84,20 +83,38 @@
   }
 }
 
-.dashboard_settings_container {
-  width: 85%;
+.dashboard-container {
+  width: 85vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-left: 15vw;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+}
 
-  .dashboard_settings_header {
-    height: 12vh;
+.dashboard_settings_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+
+  .generalSettings {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
 
-    h1{
-        font-size: 44px;
-        letter-spacing: 1.1px;
+    h1 {
+      font-size: 36px;
+      letter-spacing: 1.1px;
+      margin: 0 auto;
     }
   }
 
@@ -105,12 +122,105 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-
+    width: 100%;
+    padding: 10%;
   }
 
-  .viewSettings {
+
+  .viewSettings, .sliderSettings, .promoVidSettings {
     display: flex;
     flex-direction: row;
     gap: 2rem;
+    width: 100%;
+
+    h1 {
+      font-size: 30px;
+      letter-spacing: 1.1px;
+      margin: 0 auto;
+    }
+
+    .sliderSettings, .promoVidSettings {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 100%;
+
+      .formGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 90%;
+      }
+    }
+
+
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 47%;
+
+    label {
+      font-size: 1rem;
+      color: #8a6d3b;
+    }
+
+    input {
+      padding: 0.36rem;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      color: #a9a9a9;
+      outline: none;
+      background-color: transparent;
+      transition: 0.1s ease-in-out;
+    }
+
+    input:focus {
+      border-bottom-color: #aa8453;
+    }
+
+    input::placeholder {
+      font-family: "Barlow", sans-serif;
+    }
+  }
+
+  .hotel {
+    width: 50%;
+    gap: 1.4rem !important;
+  }
+}
+
+.settingsBtns {
+  display: flex;
+  gap: 2rem;
+  justify-content: end;
+
+  button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ead6bd;
+    color: #8a6d3b;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  button[type="submit"] {
+    background-color: #aa8453;
+    color: #fff;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #8a6d3b;
   }
 }

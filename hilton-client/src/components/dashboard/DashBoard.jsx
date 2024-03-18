@@ -9,10 +9,8 @@ export function DashBoard() {
   return (
     <div className="dashboard">
       <Aside />
+      <div className="dashboard-container">
       <div className="dashboard_settings_container">
-        <div className="dashboard_settings_header">
-          <h1>Settings</h1>
-        </div>
         <div className="dashboard_Settings_body">
           <GeneralSettings />
           <hr />
@@ -20,11 +18,11 @@ export function DashBoard() {
           <div className="viewSettings">
             <SliderSettings />
             <hr />
-
             <PromoVideoSettings />
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

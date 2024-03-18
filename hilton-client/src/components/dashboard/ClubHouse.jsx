@@ -4,10 +4,12 @@ export function ClubHouseDash () {
     return (
         <div className="dashboard">
             <Aside />
-            <div className="dashboard__container">
-                <div className="dashboard__container__header">
+            <div className="dashboard-container">
+            <div className="dashboard_clubHouse_container">
+                <div className="dashboard_container_header">
                     <h1>Club House</h1>
                 </div>
+            </div>
             </div>
         </div>
     )

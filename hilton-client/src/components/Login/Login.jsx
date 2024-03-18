@@ -43,6 +43,7 @@ export function Login() {
   };
 
   return (
+    <div className="login-container">
     <div className="login">
       <div className="title">
         <h2>Welcome!</h2>
@@ -86,6 +87,7 @@ export function Login() {
 
         <button type="submit">Login</button>
       </form>
+    </div>
     </div>
   );
 }

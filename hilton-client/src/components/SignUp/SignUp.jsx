@@ -58,6 +58,7 @@ export function SignUp() {
   };
 
   return (
+    <div className="signup-container">
     <div className="signup">
       <div className="title">
         <h2>Sign Up</h2>
@@ -223,6 +224,7 @@ export function SignUp() {
           </Link>
         </div>
       </form>
+    </div>
     </div>
   );
 }

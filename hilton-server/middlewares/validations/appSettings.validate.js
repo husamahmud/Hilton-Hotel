@@ -16,7 +16,7 @@ export class SettingsValidate {
                 twitter: Joi.string(),
                 youtube: Joi.string(),
                 tiktok: Joi.string(),
-            }).required(),
+            }),
         });
         return schema.validateAsync(settingsDto);
     }

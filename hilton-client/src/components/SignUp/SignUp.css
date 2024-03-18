@@ -1,8 +1,10 @@
-body {
+.signup-container {
+    width: 100vw;
+    height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
 }
 
 .signup {
@@ -10,6 +12,15 @@ body {
     padding-block: 2.5rem;
     border-radius: 36px;
     box-shadow: rgba(0, 0, 0, 0.16) 0 10px 36px 0, rgba(0, 0, 0, 0.06) 0 0 0 1px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto !important;
+    margin-block-start: auto !important;
+    margin-block-end: auto !important;
+    inline-size: max-content;
 
     .title {
         margin-bottom: 2rem;
