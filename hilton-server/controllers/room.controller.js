@@ -55,12 +55,13 @@ export class RoomController {
     static getRoomByRoomNum = async (req, res) => {
         const roomDao = new RoomDao();
         try {
-            const room = await roomDao.getRoomByRoomNum(req.body.roomNum);
+            const room = await roomDao.getRoomByRoomNum(req.params.roomNum);
             return res.status(200).json({
                 message: 'Room retrieved successfully',
                 data: room,
             });
         } catch (e) {
+            console.log(e)
             return res.status(500).json({ error: e.message || 'Internal server error' });
         }
     }

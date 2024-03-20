@@ -39,10 +39,14 @@ export class RoomDao {
   };
 
   getRoomByRoomNum = async (roomNum) => {
-    const room = await prisma.room.findMany({
+    const room = await prisma.room.findUnique({
       where: {
         roomNum,
       },
+      include:{
+        user: true,
+        extraServices: true,
+      }
     });
     return room;
   };

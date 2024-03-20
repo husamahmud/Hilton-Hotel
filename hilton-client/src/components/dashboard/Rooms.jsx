@@ -3,99 +3,99 @@ import "../dashboard/dashboard.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Aside } from "./Aside";
+import { RoomByNumber } from "./Rooms/RoomByNumber";
+import { CreateRoom } from "./Rooms/RoomCreation";
+import { AllRooms } from "./Rooms/AllRooms";
 
 export function RoomsDash() {
   const { register, handleSubmit } = useForm();
+  const [room, setRoom] = useState(null);
 
-  const [rooms, setRooms] = useState(null);
-    const [roomId, setRoomId] = useState(null);
+  const [openRoomNumber, setOpenRoomNumber] = useState(false);
+  const [openAllRooms, setOpenAllRooms] = useState(false);
+  const [openCreateRoom, setOpenCreateRoom] = useState(false);
 
-  useEffect(() => {
+
+  const getRoomByNumber = async (data) => {
+    console.log("data from get room", data);
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const adminId = JSON.parse(user).id;
+    const roomNum = data.roomNum;
 
-    const getAllRooms = async () => {
-      const url = "http://localhost:3000/api/v1/room";
-      const options = {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          adminId,
-        },
-      };
-      const res = await fetch(url, options);
-
-      const rooms = await res.json();
-
-      return rooms;
-    };
-    const fetchData = async () => {
-      const fetchedRooms = await getAllRooms();
-      console.log(fetchedRooms)
-      setRooms(fetchedRooms);
-    };
-
-    fetchData();
-  }, []);
-
-
-  const updateRooms = async (data) => {
-    console.log(data);
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const adminId = JSON.parse(user).id;
-
-    console.log(data.socialMedia);
-    const url = `http://localhost:3000/api/v1/rooms/`;
+    const url = `http://localhost:3000/api/v1/room/room/${roomNum}`;
 
     const options = {
-      method: "PUT",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({}),
     };
     const response = await fetch(url, options);
-    const result = await response.json();
-    console.log(result);
 
-    if (response.status === 200) {
-      alert("Rooms Updated Successfully");
-    }
-    if (response.status === 500) {
-      alert(result.error);
-    }
+    console.log(response);
+    const result = await response.json();
+    setRoom(result.data);
+    console.log("room innnnnnnnnnnnnnnn", result);
+    return result;
   };
+
+  console.log("room outttttttt", room);
 
   return (
     <div className="dashboard">
       <Aside />
       <div className="dashboard-container">
         <div className="dashboard_rooms_container">
-          <div className="dashboard_container_header">
-            {rooms &&
-              rooms.data.map((room) => {
-                return (
-                  <div className="room" key={room.id} onClick={()=>setRoomId(roomId)}>
-                    {" "}
-                    <p>room number: {room.roomNum}</p>
-                    <p>room type: {room.types}</p>
-                    <p>room price: {room.price}</p>
-                    <p>room description: {room.description}</p>
-                    <p>room aminities: {room.aminities}</p>
-                    <p>room.images: {room.images}</p>
-                    <p>room.view: {room.view}</p>
-                    <p>{roomId? "room Id: roomId? roomId" : ""}</p>
-                    <hr />
-                    <br />
-                  </div>
-                );
-              })}
+          <div className="dashboard_rooms_header">
+            <h1>Rooms DashBoard</h1>
+            <div className="dashboard_container_header_buttons">
+              <form onSubmit={handleSubmit(getRoomByNumber)}>
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setOpenAllRooms(true);
+                    setOpenCreateRoom(false);
+                    setOpenRoomNumber(false);
+                  }}
+                >
+                  All Rooms
+                </button>
+
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setOpenCreateRoom(true);
+                    setOpenAllRooms(false);
+                    setOpenRoomNumber(false);
+                  }}
+                >
+                  Create Room
+                </button>
+
+                <div className="search">
+                  <input
+                    type="text"
+                    placeholder="Search Rooms"
+                    {...register("roomNum")}
+                  />
+                  <button
+                    className="btn"
+                    type="submit"
+                    onClick={() => {
+                      setOpenRoomNumber(true);
+                      setOpenAllRooms(false);
+                      setOpenCreateRoom(false);
+                    }}
+                  >
+                    Search Rooms
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
+          {openRoomNumber && room && <RoomByNumber room={room} />}
+          {openCreateRoom && <CreateRoom />}
+          {openAllRooms && <AllRooms />}
         </div>
       </div>
     </div>
