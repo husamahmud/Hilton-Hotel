@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import "../dashboard/dashboard.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

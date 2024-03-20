@@ -202,7 +202,7 @@ form {
 .settingsBtns {
   display: flex;
   gap: 2rem;
-  justify-content: end;
+  justify-content: flex-end;
 
   button {
     padding: 0.5rem 1.5rem;

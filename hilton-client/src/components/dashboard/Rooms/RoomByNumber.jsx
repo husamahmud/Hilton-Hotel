@@ -1,6 +1,6 @@
 import "../../dashboard/dashboard.css";
 import { useState } from "react";
-import { get, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 export function RoomByNumber(props) {
   const { room } = props;
