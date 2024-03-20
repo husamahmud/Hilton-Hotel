@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import "../../dashboard/dashboard.css";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { RoomByNumber } from "./RoomByNumber";
 
 export function AllRooms() {
-  const { register, handleSubmit } = useForm();
 
   const [rooms, setRooms] = useState(null);
   const [room, setRoom] = useState(null);
-  const [roomId, setRoomId] = useState(null);
   const [roomView, setRoomView] = useState(false);
 
   const getRoomById = async (roomId) => {
@@ -29,7 +26,6 @@ export function AllRooms() {
     console.log(response);
     const result = await response.json();
     setRoom(result.data);
-    console.log("room innnnnnnnnnnnnnnn", result);
     return result;
   };
 
@@ -78,7 +74,6 @@ export function AllRooms() {
                   key={room.id}
                   onClick={() => {
                     setRoomView(true);
-                    setRoomId(room.id);
                     getRoomById(room.id);
                   }}
                   style={{ cursor: "pointer", display: "inline-flex", marginBottom:"2rem", border:roomView? "1px solid #ccc": "none", padding: "1rem"}}
