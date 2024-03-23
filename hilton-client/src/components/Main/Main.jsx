@@ -1,13 +1,11 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import Aside from "../Aside/Aside";
 import Home from "../Home/Home";
 import About from "../About/About";
 import Footer from "../Footer/Footer";
-import "./Main.css"
-import "normalize.css"
-
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4MzQ3ZjdkLTc1ZWEtNDczMy1hOGEzLTNjNzg0OTZjZWU3MSIsImVtYWlsIjoia2ZhdHRlbUBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTAxMjg4NTIsImV4cCI6MTcxMDM4ODA1Mn0.pU7WqJhhRk-W-ztKN69fTkJoaX-9LKR1J2xXpV6ew3U"
+import "./Main.css";
+import "normalize.css";
 
 const links = [
 	{path: "/", title: "Home", component: Home},
@@ -23,7 +21,7 @@ export default function Main() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	function handleOpenToggle() {
-		setIsOpen(!isOpen)
+		setIsOpen(!isOpen);
 	}
 
 	return (
@@ -34,10 +32,12 @@ export default function Main() {
 			<div className={`main-content ${isOpen ? "open" : ""}`}>
 				<div className="page">
 					<div className={`nav-toggle ${isOpen ? "open" : ""}`}>
-						<input className="checkbox"
-						       type="checkbox"
-						       checked={isOpen}
-						       onChange={handleOpenToggle} />
+						<input
+							className="checkbox"
+							type="checkbox"
+							checked={isOpen}
+							onChange={handleOpenToggle}
+						/>
 						<svg fill="none"
 						     viewBox="0 0 50 50"
 						     height="30"
@@ -85,18 +85,3 @@ export default function Main() {
 		</div>
 	);
 }
-
-
-// useEffect(() => {
-// 	fetch("http://localhost:3000/api/v1/sliders", {
-// 		headers: {
-// 			"Authorization": `Bearer ${TOKEN}`
-// 		}
-// 	})
-// 		.then(res => {
-// 			if (!res.ok) throw new Error(`HTTP error ${res.status}`)
-// 			return res.json()
-// 		})
-// 		.then(data => console.log(data))
-// 		.catch(err => console.error(err))
-// }, []);

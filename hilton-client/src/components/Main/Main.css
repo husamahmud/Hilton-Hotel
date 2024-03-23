@@ -15,7 +15,7 @@
 			text-decoration: none;
 
 			.stars {
-				padding: .5rem;
+				padding: 0.5rem;
 
 				span {
 					color: var(--primary-color);
@@ -23,7 +23,7 @@
 			}
 
 			h2 {
-				font-family: 'Gilda Display', serif;
+				font-family: "Gilda Display", serif;
 				color: var(--primary-color);
 				text-transform: uppercase;
 				font-weight: 100;
@@ -56,7 +56,7 @@
 						color: var(--tertiary-color);
 						cursor: pointer;
 						font-size: 14px;
-						transition: color .2s ease-in-out;
+						transition: color 0.2s ease-in-out;
 						width: 100%;
 						text-transform: uppercase;
 						letter-spacing: 1px;
@@ -112,7 +112,7 @@
 	}
 
 	.main-content {
-		min-width: 75%;
+		width: 75%;
 		float: right;
 
 		.page {
@@ -120,9 +120,6 @@
 			justify-content: center;
 			align-content: center;
 			flex-direction: column;
-			height: 100vh;
-			background-image: url("slider.jpg");
-			background-size: cover;
 		}
 
 		.nav-toggle {
@@ -139,66 +136,627 @@
 			align-items: center;
 			justify-content: center;
 			text-align: center;
-			gap: 1rem;
 
-			.star {
-				font-size: 28px;
-				color: #e4a853;
-				text-transform: uppercase;
+			.hero {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				background-image: url("slider.jpg");
+				background-size: cover;
+				height: 100vh;
+				width: 100%;
+
+				.star {
+					font-size: 28px;
+					color: #e4a853;
+					text-transform: uppercase;
+				}
+
+				.welcome-text {
+					max-width: 700px;
+
+					p {
+						text-transform: uppercase;
+						font-weight: 100;
+						letter-spacing: 3px;
+					}
+
+					h1 {
+						font-family: "Gilda Display", serif;
+						font-size: 55px;
+						font-weight: 400;
+						letter-spacing: 10px;
+						text-transform: uppercase;
+						line-height: 1.35em;
+						color: #fff;
+					}
+
+					button {
+						position: relative;
+						width: 200px;
+						height: 50px;
+						background-color: transparent;
+						border: 1px solid white;
+						color: white;
+						cursor: pointer;
+						font-weight: 400;
+						overflow: hidden;
+						transform: perspective(1px) translateZ(0);
+						transition-duration: 0.3s;
+					}
+
+					button:before {
+						content: "";
+						position: absolute;
+						background-color: white;
+						z-index: -1;
+						top: 0;
+						left: 0;
+						width: 0;
+						height: 100%;
+						transition-duration: 0.3s;
+					}
+
+					button:hover {
+						color: var(--secondary-color);
+					}
+
+					button:hover::before {
+						width: 100%;
+					}
+				}
 			}
 
-			.welcome-text {
-				max-width: 700px;
+			.about {
+				padding: 120px 0;
 
-				p {
-					text-transform: uppercase;
-					font-weight: 100;
-					letter-spacing: 3px;
+				.container {
+					padding-inline: 50px;
+					display: flex;
+					gap: .5rem;
+
+					.desc {
+						text-align: left;
+
+						.stars {
+							padding: 0.5rem;
+
+							span {
+								color: var(--primary-color);
+							}
+						}
+
+						.name {
+							text-transform: uppercase;
+							font-weight: 100;
+							letter-spacing: 3px;
+						}
+
+						h2 {
+							font-family: "Gilda Display", serif;
+							text-transform: uppercase;
+							font-weight: 400;
+							letter-spacing: 2px;
+							font-size: 46px;
+							color: #fff;
+							margin-bottom: 20px;
+							line-height: 1.25em;
+						}
+
+						.text {
+							font-size: 14px;
+							color: var(--tertiary-color);
+							font-weight: 100;
+							line-height: 1.5em;
+						}
+					}
+
+					.imgs {
+						display: flex;
+						justify-content: space-evenly;
+						gap: .5rem;
+
+						.special {
+							margin-top: 3rem;
+						}
+
+						img {
+							width: 100%;
+						}
+					}
+				}
+			}
+
+			@media (max-width: 1024px) {
+				.about .container {
+					display: flex;
+					flex-wrap: wrap;
+
+					.imgs {
+						justify-content: space-between;
+
+						img {
+							width: 70%;
+						}
+					}
+				}
+			}
+
+			.rooms {
+				background-color: #222222;
+				width: 100%;
+				padding-inline: 50px;
+				padding-block: 60px;
+
+				.desc {
+					text-align: left;
+
+					p {
+						font-size: 15px;
+						font-weight: 400;
+						color: #aa8453;
+						text-transform: uppercase;
+						position: relative;
+						letter-spacing: 6px;
+						margin-bottom: 5px
+					}
+
+					h2 {
+						font-size: 46px;
+						font-family: 'Gilda Display', serif;
+						font-weight: 400;
+						color: #fff;
+						position: relative;
+						margin-bottom: 20px;
+						line-height: 1.25em;
+					}
 				}
 
-				h1 {
-					font-family: 'Gilda Display', serif;
-					font-size: 55px;
-					font-weight: 400;
-					letter-spacing: 10px;
-					text-transform: uppercase;
-					line-height: 1.35em;
-					color: #fff;
+				.container {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					grid-gap: 1rem;
+
+					@media (max-width: 992px) {
+						& {
+							grid-template-columns: 1fr;
+						}
+					}
+
+
+					& > div {
+						width: 100%;
+						overflow: hidden;
+
+						.item {
+							position: relative;
+							overflow: hidden;
+							transition: .2s all ease-in-out;
+
+							&:hover .con {
+								transform: translateY(-170px);
+							}
+
+							.img {
+								img {
+									width: 100%;
+									height: auto;
+									transition: .5s all ease-in-out;
+								}
+							}
+
+							.category {
+								position: absolute;
+								top: 2rem;
+								right: 1rem;
+								transform: rotate(-90deg);
+								border: 1px solid white;
+								padding: .5rem;
+
+								a {
+									color: white;
+								}
+							}
+
+							.con {
+								position: absolute;
+								transform: translateY(-100px);
+								width: 100%;
+								left: 0;
+								padding-inline: 1rem;
+								display: flex;
+								flex-direction: column;
+								gap: 1.5rem;
+								transition: .2s all ease-in-out;
+
+								.text {
+									display: flex;
+									flex-direction: column;
+									justify-content: space-between;
+									gap: .5rem;
+									text-align: left;
+
+									h6 {
+										color: #fff;
+										font-size: 15px;
+										font-weight: 400;
+										letter-spacing: 3px;
+										text-transform: uppercase;
+									}
+
+									a {
+										text-decoration: none;
+										color: #fff;
+										letter-spacing: 3px;
+										font-family: "Gilda Display", serif;
+										font-size: 27px;
+										font-weight: 400;
+										margin-top: 5px;
+										margin-bottom: 5px;
+									}
+
+									.line {
+										background-color: white;
+										border-radius: 5px;
+										width: 50%;
+										height: 1px;
+										transition: .2s width ease-in-out;
+									}
+								}
+
+								.row {
+									display: flex;
+									align-items: center;
+									justify-content: space-between;
+									width: 100%;
+
+									.services {
+										display: flex;
+										align-items: center;
+										gap: 1rem;
+
+										img {
+											width: 1.5rem;
+											height: 1.5rem;
+											aspect-ratio: 1/1;
+										}
+									}
+
+									.details {
+										display: flex;
+
+										a {
+											color: white;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			section.services {
+				padding-block: 120px;
+
+				.container {
+					padding-inline: 50px;
+					display: flex;
+					gap: 1rem;
+
+					& > div:first-child {
+						width: 50%;
+					}
+
+					.desc {
+						text-align: left;
+
+						.name {
+							color: var(--primary-color);
+							font-size: 15px;
+							font-family: 'Barlow Condensed', sans-serif;
+							font-weight: 400;
+							text-transform: uppercase;
+							position: relative;
+							letter-spacing: 6px;
+						}
+
+						h2 {
+							font-size: 46px;
+							font-family: 'Gilda Display', serif;
+							font-weight: 400;
+							color: #fff;
+							position: relative;
+							margin-bottom: 20px;
+							line-height: 1.25em;
+						}
+
+						p {
+							font-family: 'Barlow', sans-serif;
+							font-size: 15px;
+							font-weight: 400;
+							line-height: 1.75em;
+							color: rgba(255, 255, 255, 0.5);
+							margin-bottom: 20px;
+						}
+
+						.reservation {
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+
+							.icon {
+								font-size: 40px;
+								color: var(--primary-color);
+							}
+
+							p {
+								font-size: 20px;
+								margin: 0;
+							}
+
+							a {
+								color: white;
+							}
+						}
+					}
+
+					.cards {
+						display: flex;
+						flex-direction: row;
+						gap: 2rem;
+
+						.card {
+							display: flex;
+							flex-direction: column;
+							text-align: left;
+							background-color: #222222;
+
+							& > div {
+								width: 50%;
+								overflow: hidden;
+							}
+
+							.img {
+								width: 100%;
+								overflow: hidden;
+
+								img {
+									width: 100%;
+								}
+							}
+
+							.info {
+								padding: 2rem 3rem;
+								width: 100%;
+
+								h4 {
+									line-height: 1;
+									margin: 0;
+									font-weight: 100;
+									font-family: 'Gilda Display', serif;
+									font-size: 24px;
+									color: #fff;
+									margin-bottom: 20px;
+								}
+
+								.amount {
+									margin: 0;
+									line-height: 1;
+									font-size: 30px;
+									margin-bottom: 20px;
+									color: #aa8453;
+
+									span {
+										font-family: 'Barlow', sans-serif;
+										font-size: 15px;
+										color: #999;
+									}
+								}
+
+								ul {
+									list-style: none;
+
+									li {
+										display: flex;
+										align-items: center;
+										gap: .5rem;
+										font-size: 14px;
+
+										span {
+											color: #aa8453;
+										}
+
+										span.false {
+											color: #999;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			.testimonials {
+				width: 100%;
+				padding-block: 4rem;
+				background-image: url("bg.png");
+				position: relative;
+				background-size: cover;
+				background-attachment: fixed;
+				background-repeat: no-repeat;
+
+				.background {
+					padding-block: 4rem;
 				}
 
-				button {
-					position: relative;
-					width: 200px;
-					height: 50px;
-					background-color: transparent;
-					border: 1px solid white;
-					color: white;
-					cursor: pointer;
-					font-weight: 400;
-					overflow: hidden;
-					transform: perspective(1px) translateZ(0);
-					transition-duration: 0.3s;
-				}
+				.container {
+					padding-inline: 3rem;
 
-				button:before {
-					content: "";
-					position: absolute;
-					background-color: white;
-					z-index: -1;
-					top: 0;
-					left: 0;
-					width: 0;
-					height: 100%;
-					transition-duration: 0.3s;
+					.row {
+						display: flex;
+						flex-direction: row;
+						gap: 2rem;
 
-				}
+						.desc {
+							text-align: left;
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
 
-				button:hover {
-					color: var(--secondary-color);
-				}
+							.stars span {
+								color: var(--primary-color);
+							}
 
-				button:hover::before {
-					width: 100%;
+							.text {
+								color: #fff;
+								font-size: 24px;
+								margin-bottom: 30px;
+								line-height: 1.5em;
+								font-family: 'Gilda Display', serif;
+								font-weight: 400;
+							}
+
+							.reservation {
+								display: flex;
+								justify-content: space-between;
+								align-items: center;
+								width: 180px;
+
+								.icon {
+									font-size: 36px;
+									color: white;
+								}
+
+								.text {
+									text-align: left;
+									color: white;
+									font-size: 15px;
+									letter-spacing: 1px;
+									font-weight: 100;
+									margin: 0;
+
+									p {
+										margin-bottom: 5px;
+									}
+
+									a {
+										display: block;
+										font-size: 15px;
+										letter-spacing: 2px;
+										font-weight: 400;
+										color: white;
+									}
+								}
+							}
+
+							.callus {
+								display: flex;
+								align-items: center;
+								gap: .5rem;
+
+								span {
+									color: white;
+								}
+							}
+						}
+					}
+
+					@media (max-width: 1024px) {
+						.row {
+							flex-direction: column;
+						}
+
+						.form {
+							margin-inline: auto;
+							width: 400px;
+						}
+					}
+
+					.form {
+						min-width: 400px;
+						background: #1b1b1b;
+						padding-block: 3rem;
+						padding-inline: 2rem;
+						display: flex;
+						flex-direction: column;
+						gap: 1rem;
+
+						.head-box {
+							text-align: center;
+
+							p {
+								font-size: 15px;
+								font-weight: 400;
+								color: #aa8453;
+								text-transform: uppercase;
+								position: relative;
+								letter-spacing: 6px;
+								margin-bottom: 1rem;
+							}
+
+							h2 {
+								font-size: 20px;
+								font-family: 'Gilda Display', serif;
+								font-weight: 400;
+								color: #fff;
+								position: relative;
+								margin-bottom: 20px;
+								line-height: 1.25em;
+							}
+						}
+
+						.booking {
+							form {
+								display: flex;
+								flex-direction: column;
+								gap: 1.5rem;
+
+								label {
+									font-size: 1rem;
+									color: #A9A9A9;
+									padding: .5rem;
+									border-bottom: 1px solid #ccc;
+								}
+
+								input {
+									padding: 7.5px;
+									border: none;
+									border-bottom: 1px solid #ccc;
+									color: #A9A9A9;
+									outline: none;
+									background-color: transparent;
+									transition: .1s ease-in-out;
+								}
+
+								input[type="date"]::-webkit-calendar-picker-indicator {
+									filter: invert(80%);
+								}
+
+								select {
+									padding-inline: 1rem;
+									padding-block: .3rem;
+									background: transparent;
+									color: white;
+									border: navajowhite;
+								}
+
+								button {
+									margin-inline: auto;
+									text-align: center;
+									width: 210px;
+									padding-block: .5rem;
+									padding-inline: 1rem;
+									background: var(--primary-color);
+									color: white;
+									border-radius: 5px;
+									cursor: pointer;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -219,9 +777,8 @@
 				height: 50px;
 				margin: 1rem;
 				border-radius: 50%;
-				transition: 0.3s ease-in-out; /************************************/
+				transition: 0.3s ease-in-out;
 				background-color: var(--primary-color);
-
 
 				.checkbox {
 					position: absolute;
@@ -285,11 +842,10 @@
 	}
 }
 
-
 .open {
 	left: 50% !important;
 	position: fixed;
-	transition: .3s;
+	transition: 0.3s;
 }
 
 .asideOpen {
