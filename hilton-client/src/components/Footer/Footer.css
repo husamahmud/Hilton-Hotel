@@ -1,0 +1,136 @@
+footer {
+	display: flex;
+	flex-direction: row;
+	padding-inline: 50px;
+	padding-block: 60px;
+
+	@media (max-width: 992px) {
+		& {
+			flex-direction: column;
+			gap: 2rem
+		}
+	}
+
+	& > div {
+		flex: 1;
+		padding-inline: 30px;
+
+		h3 {
+			font-size: 24px;
+			font-family: 'Gilda Display', serif;
+			font-weight: 400;
+			line-height: 1.25em;
+			margin-bottom: 20px;
+			color: #fff;
+		}
+	}
+
+	.about-hotel {
+		p {
+			font-size: 15px;
+			color: var(--tertiary-color);
+			margin: 0;
+			line-height: 1.75em;
+		}
+	}
+
+	.links {
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: .5rem;
+
+			li:before {
+				content: "";
+				position: absolute;
+				top: 40%;
+				width: .5rem;
+				height: .5rem;
+				scale: 0;
+				border-radius: 50%;
+				transition: .3s scale;
+				background-color: var(--primary-color);
+			}
+
+			li {
+				position: relative;
+				transition: .3s width;
+
+				button {
+					background: transparent;
+					border: none;
+					color: var(--tertiary-color);
+					cursor: pointer;
+					width: 100%;
+					text-align: left;
+					padding: 5px;
+					transition: .3s;
+				}
+			}
+
+			li:hover:before {
+				scale: 1;
+			}
+
+			li:hover button {
+				margin-left: 10px;
+			}
+		}
+	}
+
+	.about-contact {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		p {
+			font-size: 15px;
+			color: var(--tertiary-color);
+			margin: 0;
+			line-height: 1.75em;
+		}
+
+		.phone {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+
+			span {
+				color: var(--tertiary-color);
+			}
+
+			.icon {
+				font-size: 2rem;
+			}
+
+			.text {
+				font-family: 'Gilda Display', serif;
+				font-size: 24px;
+
+				a {
+					color: white;
+				}
+			}
+		}
+
+		.email {
+			color: whitesmoke;
+			padding-bottom: 5px;
+			border-bottom: 1px solid var(--primary-color);
+		}
+
+		.social-icons {
+			display: flex;
+			justify-content: space-evenly;
+
+			img {
+				width: 30px;
+				filter: hue-rotate(180deg);
+				opacity: 0.8;
+			}
+		}
+	}
+}
