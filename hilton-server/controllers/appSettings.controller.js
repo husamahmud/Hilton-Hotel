@@ -9,10 +9,11 @@ export class SettingsController {
     static createSettings = async (req, res) => {
         const settingsDto = new SettingsDto(req.body);
         const settingsDao = new SettingsDao();
+        settingsDto.adminId = req.user.id;
 
         try {
 
-            await validateAdminId(req.body.adminId); // TODO - req.user
+            await validateAdminId(req.user.id); // TODO - req.user
 
             const { error } = await SettingsValidate.createSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
@@ -51,7 +52,7 @@ export class SettingsController {
                 }
             }
 
-            await validateAdminId(req.body.adminId); // TODO - req.user
+            await validateAdminId(req.user.id); // TODO - req.user
 
             const { error } = await SettingsValidate.updateSettings(settingsDto);
             if (error) return res.status(400).json({ error: error.message });
