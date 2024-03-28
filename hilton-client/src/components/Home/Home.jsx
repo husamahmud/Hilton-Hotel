@@ -39,7 +39,6 @@ export default function Home() {
 					<button onClick={() => navigate("/rooms")}>Rooms & Suites</button>
 				</div>
 			</section>
-
 			<section className="about">
 				<div className="container">
 					<div className="desc">

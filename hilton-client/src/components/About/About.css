@@ -1,0 +1,41 @@
+.about-bg {
+	background-image: url("/Users/husam/Dev/Hilton-Hotel/hilton-client/public/3.jpg");
+	position: relative;
+}
+
+.about-bg:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.25);
+	mix-blend-mode: multiply;
+}
+
+.testimonials-bg {
+	position: relative;
+	background-image: url('/Users/husam/Dev/Hilton-Hotel/hilton-client/public/4.jpg');
+}
+
+.testimonials-bg:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.25);
+	mix-blend-mode: multiply;
+}
+
+.teamSocialMedia {
+	transform: translateY(50px);
+}
+
+.teamImg:hover .teamSocialMedia {
+	transform: translateY(-70px);
+}

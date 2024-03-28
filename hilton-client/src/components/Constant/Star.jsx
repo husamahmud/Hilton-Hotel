@@ -1,5 +1,7 @@
-export default function Star() {
+export default function Star({color = "white"}) {
 	return (
-		<span className="material-symbols-rounded star">star</span>
+		<span className={`material-symbols-rounded star text-${color}`}>
+			star
+		</span>
 	)
 }

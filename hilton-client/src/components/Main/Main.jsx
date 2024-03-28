@@ -5,7 +5,6 @@ import Home from "../Home/Home";
 import About from "../About/About";
 import Footer from "../Footer/Footer";
 import "./Main.css";
-import "normalize.css";
 
 const links = [
 	{path: "/", title: "Home", component: Home},
