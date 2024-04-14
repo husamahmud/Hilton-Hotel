@@ -1,13 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import {Link, useNavigate} from "react-router-dom";
+import {useState} from "react";
+import {useForm} from "react-hook-form";
 import "./Login.css";
 
 export function Login() {
-  const [loginError, setLoginError] = useState(null);
-  const navigate = useNavigate();
+	const [loginError, setLoginError] = useState(null);
+	const navigate = useNavigate();
 
-  const { register: login, handleSubmit } = useForm();
+	const {register: login, handleSubmit} = useForm();
+
 
   const signin = async (data) => {
     if (!data.email.includes("@")) {
@@ -50,40 +51,42 @@ export function Login() {
         <p>We are delighted to have you back!</p>
       </div>
 
-      <form className="login-form" onSubmit={handleSubmit(signin)}>
-        {loginError && <p className="error">{loginError}</p>}
-        <div>
-          <input
-            type="text"
-            placeholder="Email or Username"
-            id="emailorusername"
-            required
-            {...login("email" || "username")}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            id="password"
-            required
-            minLength={6}
-            {...login("password")}
-          />
-        </div>
+			<form className="login-form"
+			      onSubmit={handleSubmit(signin)}>
+				{loginError && <p className="error">{loginError}</p>}
+				<div>
+					<input
+						type="text"
+						placeholder="Email or Username"
+						id="emailorusername"
+						required
+						{...login("email" || "username")}
+					/>
+				</div>
+				<div>
+					<input
+						type="password"
+						placeholder="Password"
+						id="password"
+						required
+						minLength={6}
+						{...login("password")}
+					/>
+				</div>
 
-        <div>
-          <Link to="/auth/forgetpassword" className="link">
-            Forget Password?
-          </Link>
-          <Link
-            to="/auth/register"
-            className="link"
-            style={{ color: "#aa8453" }}
-          >
-            Sign up
-          </Link>
-        </div>
+				<div>
+					<Link to="/auth/forgetpassword"
+					      className="link">
+						Forget Password?
+					</Link>
+					<Link
+						to="/auth/register"
+						className="link"
+						style={{color: "#aa8453"}}
+					>
+						Sign up
+					</Link>
+				</div>
 
         <button type="submit">Login</button>
       </form>

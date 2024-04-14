@@ -1,0 +1,13 @@
+.contact-bg {
+    background-image: url("/Users/husam/Dev/Hilton-Hotel/hilton-client/public/10.jpg");
+    position: relative;
+}
+
+.booking-bg {
+    background-image: url("/Users/husam/Dev/Hilton-Hotel/hilton-client/public/4.jpg");
+    position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
