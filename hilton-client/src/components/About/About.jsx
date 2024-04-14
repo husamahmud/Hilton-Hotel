@@ -1,4 +1,4 @@
-import "./About.css"
+import './About.css'
 
 function Star() {
   return (
@@ -10,51 +10,51 @@ function Star() {
 
 const facilities = [
   {
-    img: "plane.svg",
-    title: "Pick Up & Drop",
-    text: "We’ll pick up from airport while you comfy on your ride mus entue habitant."
+    img: 'plane.svg',
+    title: 'Pick Up & Drop',
+    text: 'We’ll pick up from airport while you comfy on your ride mus entue habitant.',
   },
   {
-    img: "car.svg",
-    title: "Parking Space",
-    text: "Fusce tincidunt nis ace park norttito sit amet space mus entue habitant."
+    img: 'car.svg',
+    title: 'Parking Space',
+    text: 'Fusce tincidunt nis ace park norttito sit amet space mus entue habitant.',
   },
   {
-    img: "bed.svg",
-    title: "Room Service",
-    text: "Room tincidunt nis ace park nortito sit amet space mus netesue habitant."
+    img: 'bed.svg',
+    title: 'Room Service',
+    text: 'Room tincidunt nis ace park nortito sit amet space mus netesue habitant.',
   },
   {
-    img: "pool.svg",
-    title: "Swimming Pool",
-    text: "Swimming pool tincidunt nise ace park sit space nellentesque habitant."
+    img: 'pool.svg',
+    title: 'Swimming Pool',
+    text: 'Swimming pool tincidunt nise ace park sit space nellentesque habitant.',
   },
   {
-    img: "wi-fi.svg",
-    title: "Fibre Internet",
-    text: "Wifi tincidunt nisace park norttito sit amet space nellentue habitant."
+    img: 'wi-fi.svg',
+    title: 'Fibre Internet',
+    text: 'Wifi tincidunt nisace park norttito sit amet space nellentue habitant.',
   },
   {
-    img: "breakfast.svg",
-    title: "Breakfast",
-    text: "Eat tincidunt nisa ace park norttito sit amet space in the habitant."
+    img: 'breakfast.svg',
+    title: 'Breakfast',
+    text: 'Eat tincidunt nisa ace park norttito sit amet space in the habitant.',
   },
 ]
 
 const testimonials = [
   {
-    img: "husamsquare.png",
-    name: "Hüsam",
-    role: "Guest Review",
+    img: 'husamsquare.png',
+    name: 'Hüsam',
+    role: 'Guest Review',
     rate: 5,
-    review: "Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc."
+    review: 'Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc.',
   },
   {
-    img: "husamsquare.png",
-    name: "Kholoud",
-    role: "Guest Review",
+    img: 'husamsquare.png',
+    name: 'Kholoud',
+    role: 'Guest Review',
     rate: 5,
-    review: "Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc."
+    review: 'Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc.',
   },
 ]
 
@@ -344,7 +344,7 @@ export default function About() {
                   </div>
                   <div>
                     <div>
-                      {Array.from({length: testimonial.rate}, (_, i) => (
+                      {Array.from({ length: testimonial.rate }, (_, i) => (
                         <span key={testimonial.name}
                               className={`material-symbols-rounded star text-amber-300 text-sm`}>star</span>
                       ))}
@@ -361,5 +361,5 @@ export default function About() {
         </div>
       </div>
     </section>
-  );
+  )
 }
