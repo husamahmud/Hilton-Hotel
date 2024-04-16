@@ -22,7 +22,7 @@ export class AdminDao {
     await this.isExisted(adminDto.username, 'username');
 
     const today = new Date();
-    const birthDate = new Date(userDto.birthDate);
+    const birthDate = new Date(adminDto.birthDate);
     const age = today.getFullYear() - birthDate.getFullYear();
     if (age < 18) throw new Error('You must be at least 18 years old');
 
