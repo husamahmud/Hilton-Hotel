@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/husamahmud/Hilton-Hotel/static/css/main.ba6c87ef.css",
-    "main.js": "/husamahmud/Hilton-Hotel/static/js/main.07d87ad7.js",
-    "static/media/bg.png": "/husamahmud/Hilton-Hotel/static/media/bg.12901435f726853c9b6d.png",
-    "static/media/3.jpg": "/husamahmud/Hilton-Hotel/static/media/3.162e899e1650d2d8a939.jpg",
-    "static/media/4.jpg": "/husamahmud/Hilton-Hotel/static/media/4.ac206977e6c393478b0b.jpg",
-    "static/media/slider.jpg": "/husamahmud/Hilton-Hotel/static/media/slider.ac206977e6c393478b0b.jpg",
-    "index.html": "/husamahmud/Hilton-Hotel/index.html",
-    "main.ba6c87ef.css.map": "/husamahmud/Hilton-Hotel/static/css/main.ba6c87ef.css.map",
-    "main.07d87ad7.js.map": "/husamahmud/Hilton-Hotel/static/js/main.07d87ad7.js.map"
+    "main.css": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/css/main.eb6c173b.css",
+    "main.js": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/js/main.07d87ad7.js",
+    "static/media/bg.png": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/media/bg.12901435f726853c9b6d.png",
+    "static/media/3.jpg": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/media/3.162e899e1650d2d8a939.jpg",
+    "static/media/4.jpg": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/media/4.ac206977e6c393478b0b.jpg",
+    "static/media/slider.jpg": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/media/slider.ac206977e6c393478b0b.jpg",
+    "index.html": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/index.html",
+    "main.eb6c173b.css.map": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/css/main.eb6c173b.css.map",
+    "main.07d87ad7.js.map": "/husamahmud/Hilton-Hotel/tree/master/hilton-client/static/js/main.07d87ad7.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba6c87ef.css",
+    "static/css/main.eb6c173b.css",
     "static/js/main.07d87ad7.js"
   ]
 }
