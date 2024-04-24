@@ -9,11 +9,11 @@ import "./Main.css";
 const links = [
 	{path: "/", title: "Home", component: Home},
 	{path: "/about", title: "About", component: About},
-	{path: "/rooms", title: "Rooms & Suites", component: "Rooms"},
-	{path: "/restaurant", title: "Restaurant", component: "Restaurant"},
-	{path: "/spa", title: "Spa Center", component: "Spa"},
+	// {path: "/rooms", title: "Rooms & Suites", component: "Rooms"},
+	// {path: "/restaurant", title: "Restaurant", component: "Restaurant"},
+	// {path: "/spa", title: "Spa Center", component: "Spa"},
 	// TODO Pages, News
-	{path: "/contact", title: "Contacts", component: "Contact"},
+	// {path: "/contact", title: "Contacts", component: "Contact"},
 ];
 
 export default function Main() {
