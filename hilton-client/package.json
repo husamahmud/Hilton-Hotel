@@ -1,54 +1,53 @@
 {
-  "name": "hilton-client",
-  "version": "0.1.0",
-  "homepage": "https://gitname.github.io/react-gh-pages",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "flowbite-react": "^0.7.5",
-    "postcss-nesting": "^12.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.51.0",
-    "react-router-dom": "^6.22.2",
-    "react-scripts": "5.0.1",
-    "tailwind": "^4.0.0",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-  	"predeploy": "npm run build",
-  	"deploy": "gh-pages -d build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "gh-pages": "^6.1.1",
-    "postcss": "^8.4.38",
-    "postcss-import": "^16.1.0",
-    "postcss-nested": "^6.0.1",
-    "tailwindcss": "^3.4.1"
-  }
+	"name": "hilton-client",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.17.0",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"flowbite-react": "^0.7.5",
+		"postcss-nesting": "^12.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-hook-form": "^7.51.0",
+		"react-router-dom": "^6.22.2",
+		"react-scripts": "5.0.1",
+		"tailwind": "^4.0.0",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.19",
+		"gh-pages": "^6.1.1",
+		"postcss": "^8.4.38",
+		"postcss-import": "^16.1.0",
+		"postcss-nested": "^6.0.1",
+		"tailwindcss": "^3.4.1"
+	}
 }
