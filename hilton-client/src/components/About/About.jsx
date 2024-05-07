@@ -1,4 +1,4 @@
-import './About.css'
+import "./About.css"
 
 import {facilities, testimonials} from "../Constant/facilities";
 
@@ -48,12 +48,12 @@ export default function About() {
             </div>
             <div className="w-full md:w-1/2 flex gap-8">
               <div className="mt-16">
-                <img src="../../assets/1.jpg"
+                <img src="1.jpg"
                      className=""
                      alt="" />
               </div>
               <div className="">
-                <img src="../../assets/2.jpg"
+                <img src="2.jpg"
                      alt="" />
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function About() {
                   </div>
                   <div>
                     <div>
-                      {Array.from({ length: testimonial.rate }, (_, i) => (
+                      {Array.from({length: testimonial.rate}, (_, i) => (
                         <span key={testimonial.name}
                               className={`material-symbols-rounded star text-amber-300 text-sm`}>star</span>
                       ))}
