@@ -1,5 +1,5 @@
 .about-bg {
-	background-image: url("/Users/husam/Dev/Hilton-Hotel/hilton-client/public/3.jpg");
+	background-image: url("/Users/husam/Code/Hilton-Hotel/hilton-client/public/3.jpg");
 	position: relative;
 }
 
@@ -17,7 +17,7 @@
 
 .testimonials-bg {
 	position: relative;
-	background-image: url('/Users/husam/Dev/Hilton-Hotel/hilton-client/public/4.jpg');
+	background-image: url('/Users/husam/Code/Hilton-Hotel/hilton-client/public/4.jpg');
 }
 
 .testimonials-bg:after {

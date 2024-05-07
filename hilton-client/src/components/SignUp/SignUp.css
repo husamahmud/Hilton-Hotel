@@ -1,26 +1,16 @@
-.signup-container {
-    width: 100vw;
-    height: 100vh;
+.wrapper {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .signup {
+    width: 450px;
     padding-inline: 2rem;
     padding-block: 2.5rem;
     border-radius: 36px;
     box-shadow: rgba(0, 0, 0, 0.16) 0 10px 36px 0, rgba(0, 0, 0, 0.06) 0 0 0 1px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto !important;
-    margin-block-start: auto !important;
-    margin-block-end: auto !important;
-    inline-size: max-content;
 
     .title {
         margin-bottom: 2rem;
@@ -61,7 +51,7 @@
         label {
             font-size: 0.8rem;
             color: #A9A9A9;
-            padding: .4rem;
+            padding: .6rem;
             border-bottom: 1px solid #ccc;
         }
 
@@ -79,11 +69,12 @@
             border-bottom-color: #aa8453;
         }
 
-        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
-            color: #A9A9A9;
-        }
 
-        input[type="date"]::-webkit-calendar-picker-indicator {
+	input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+			      color: #A9A9A9;
+		  }
+
+	input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(80%);
         }
 
@@ -101,10 +92,11 @@
 
 
     }
-.error {
-    color: rgb(220 38 38);
-    font-size: 0.8rem;
-}
+
+    .error {
+        color: rgb(220 38 38);
+        font-size: 0.8rem;
+    }
 
     .login-btn {
         display: flex;
