@@ -1,0 +1,362 @@
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+}
+
+.dashboard_aside {
+  width: 15vw;
+  height: 100vh;
+  background-color: #8a6d3b;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  z-index: 100;
+  margin: 0;
+
+  .dashboard_aside_container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .dashboard_aside_container_header {
+    width: 100%;
+    height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin: 0;
+
+    h3 {
+      color: rgb(212, 211, 209);
+      font-size: 1.5rem;
+      margin: 0;
+    }
+  }
+
+  ul {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    gap: 2vh;
+    margin: 0;
+
+    li {
+      height: 5vh;
+      width: 100%;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid rgb(194, 184, 184);
+
+      a {
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: #b5a38c;
+        margin: auto;
+      }
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.active {
+  a {
+    color: aliceblue !important;
+  }
+}
+
+.dashboard-container {
+  width: 85vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-left: 15vw;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.dashboard_settings_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+
+  .generalSettings {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+
+    h1 {
+      font-size: 36px;
+      letter-spacing: 1.1px;
+      margin: 0 auto;
+    }
+  }
+
+  .dashboard_Settings_body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    padding: 10%;
+  }
+
+  .viewSettings,
+  .sliderSettings,
+  .promoVidSettings {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    width: 100%;
+
+    h1 {
+      font-size: 30px;
+      letter-spacing: 1.1px;
+      margin: 0 auto;
+    }
+
+    .sliderSettings,
+    .promoVidSettings {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 100%;
+
+      .formGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 90%;
+      }
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 47%;
+
+    label {
+      font-size: 1rem;
+      color: #8a6d3b;
+    }
+
+    input {
+      padding: 0.36rem;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      color: #a9a9a9;
+      outline: none;
+      background-color: transparent;
+      transition: 0.1s ease-in-out;
+    }
+
+    input:focus {
+      border-bottom-color: #aa8453;
+    }
+
+    input::placeholder {
+      font-family: "Barlow", sans-serif;
+    }
+  }
+
+  .hotel {
+    width: 50%;
+    gap: 1.4rem !important;
+  }
+}
+
+.settingsBtns {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-end;
+
+  button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ead6bd;
+    color: #8a6d3b;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  button[type="submit"] {
+    background-color: #aa8453;
+    color: #fff;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #8a6d3b;
+  }
+}
+
+.dashboard_rooms_container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  inline-size: 100%;
+  height: 100vh;
+
+  .dashboard_rooms_header {
+    display: flex;
+    inline-size: 100%;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+
+    .dashboard_container_header_buttons {
+      display: flex;
+      inline-size: 100%;
+
+      form {
+        display: flex;
+        flex-direction: row;
+        gap: 3rem;
+        inline-size: 100%;
+        justify-content: center;
+
+        .btn {
+          padding: 0.5rem 1.5rem;
+          border: none;
+          border-radius: 5px;
+          background-color: #ead6bd;
+          color: #8a6d3b;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+          background-color: #aa8453;
+          color: #fff;
+          padding: 0.7rem, 1.8rem;
+          font-size: 1.2rem;
+        }
+
+        input {
+          padding: 0.36rem;
+          margin-right: 1rem;
+          width: 40%;
+          border: none;
+          border-bottom: 1px solid #ccc;
+          color: #a9a9a9;
+          outline: none;
+          background-color: transparent;
+          transition: 0.1s ease-in-out;
+        }
+
+        /* select */
+        select {
+          background-color: transparent;
+          border: none;
+          padding: 1rem 0.5rem;
+          margin: 0;
+          width: 100%;
+          font-size: 20px;
+        }
+
+        input:focus {
+          border-bottom-color: #aa8453;
+        }
+      }
+    }
+  }
+
+  .dashboard_room_body {
+    width: 100%;
+    height: 85vh;
+  }
+}
+
+.updateBtn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #ead6bd;
+  color: #8a6d3b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  margin: 2rem;
+}
+
+/* slider */
+.slider-container {
+  position: relative;
+  max-width: 800px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 50%;
+  height: 450px;
+}
+
+img {
+  width: 800px;
+  height: 100%;
+}
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  z-index: 1;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}

@@ -6,6 +6,7 @@ import { EmailController } from './email.controller.js';
 import { validateAdminId } from '../utilities/Id_validations/users.id.validation.js';
 import fs from 'fs';
 import path from 'path';
+import { createToken } from '../utilities/token.js';
 
 export class AdminController {
   static createAdmin = async (req, res) => {
@@ -24,6 +25,16 @@ export class AdminController {
       const admin = await adminDao.createAdmin(adminDto);
       await EmailController.sendEmailConfirmation(req, res, 'CONFIRM');
 
+       req.user = {
+        id: admin.id,
+        email: admin.email,
+        username: admin.username,
+        role: admin.role,
+        isDeleted: admin.isDeleted,
+      };
+      
+      const token = createToken(admin, '3d');
+      res.setHeader('token', `Bearer ${token}`);
       return res.status(200).json({
         message: 'Email Sent and Admin created Successfully ', data: admin,
       });

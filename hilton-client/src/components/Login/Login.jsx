@@ -9,45 +9,47 @@ export function Login() {
 
 	const {register: login, handleSubmit} = useForm();
 
-	const signin = async (data) => {
-		if (!data.email.includes("@")) {
-			data.username = data.email;
-			delete data.email;
-		}
-		console.log(data)
-		const url = "http://localhost:3000/api/v1/auth/login";
-		const options = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		};
 
-		const res = await fetch(url, options);
-		if (!res.ok) {
-			const errorsData = await res.json();
-			if (
-				errorsData.error === "User is not found" ||
-				errorsData.error === "Password is not correct"
-			)
-				setLoginError("Username/Email or Password is incorrect");
-			else console.log(errorsData.error);
-		} else if (res.status === 200) {
-			setLoginError(null);
-			const user = await res.json();
-			localStorage.setItem("token", user.token);
-			localStorage.setItem("user", JSON.stringify(user.data));
-			navigate("/");
-		}
-	};
+  const signin = async (data) => {
+    if (!data.email.includes("@")) {
+      data.username = data.email;
+      delete data.email;
+    }
+    console.log(data)
+    const url = "http://localhost:3000/api/v1/auth/login";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
 
-	return (
-		<div className="login">
-			<div className="title">
-				<h2>Welcome!</h2>
-				<p>We are delighted to have you back!</p>
-			</div>
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      const errorsData = await res.json();
+      if (
+        errorsData.error === "User is not found" ||
+        errorsData.error === "Password is not correct"
+      )
+        setLoginError("Username/Email or Password is incorrect");
+      else console.log(errorsData.error);
+    } else if (res.status === 200) {
+      setLoginError(null);
+      const user = await res.json();
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("user", JSON.stringify(user.data));
+      navigate("/");
+    }
+  };
+
+  return (
+    <div className="login-container">
+    <div className="login">
+      <div className="title">
+        <h2>Welcome!</h2>
+        <p>We are delighted to have you back!</p>
+      </div>
 
 			<form className="login-form"
 			      onSubmit={handleSubmit(signin)}>
@@ -86,8 +88,9 @@ export function Login() {
 					</Link>
 				</div>
 
-				<button type="submit">Login</button>
-			</form>
-		</div>
-	);
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    </div>
+  );
 }

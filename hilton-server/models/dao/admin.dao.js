@@ -1,5 +1,5 @@
 import prisma from '../prisma/prisma-client.js';
-
+import { hashPassword } from '../../utilities/password.js';
 
 export class AdminDao {
   isExisted = async (element, field) => {

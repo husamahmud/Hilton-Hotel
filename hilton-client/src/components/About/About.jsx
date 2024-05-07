@@ -1,4 +1,4 @@
-import "./About.css"
+import './About.css'
 
 import {facilities, testimonials} from "../Constant/facilities";
 
@@ -296,7 +296,7 @@ export default function About() {
                   </div>
                   <div>
                     <div>
-                      {Array.from({length: testimonial.rate}, (_, i) => (
+                      {Array.from({ length: testimonial.rate }, (_, i) => (
                         <span key={testimonial.name}
                               className={`material-symbols-rounded star text-amber-300 text-sm`}>star</span>
                       ))}
@@ -313,5 +313,5 @@ export default function About() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -12,29 +12,44 @@ import client from '../app.js';
 
 export class AuthController {
 	static login = async (req, res) => {
+		const loginDto = new LoginDto(req.body);
+		const authDao = new AuthDao()
+		console.log(loginDto)
+		// if (req.body.email.includes('@')) {
+		//         loginDto.email = req.body.email;
+		//       } else {
+		//         loginDto.username = req.body.email;
+		//       }
+
 		try {
-			const loginDto = new LoginDto(req.body);
 			const {error} = await AuthValidate.login(loginDto);
 			if (error) return res.status(400).json({message: error.details[0].message});
 
-			const user = await AuthDao.login(loginDto);
+			const user = await authDao.login(loginDto);
+			console.log('object')
+			console.log(user)
 			const token = createToken(user, '3d');
 
 			if (req.body.isRemember) {
-				await prisma.refreshToken.create({
+				const refreshToken = await prisma.refreshToken.create({
 					data: {
 						token: createToken(user, '5d'),
 						userId: user.id,
 						expireAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
 					},
 				});
+				res.setHeader('refreshToken', `Bearer ${refreshToken}`)
 			}
+
 			req.user = {
 				id: user.id,
 				email: user.email,
 				username: user.username,
 				role: user.role,
+				isDeleted: user.isDeleted,
 			};
+
+			res.setHeader('token', `Bearer ${token}`);
 
 			return res.status(200).json({
 				message: 'User Logged in successfully',
@@ -46,11 +61,6 @@ export class AuthController {
 			return res.status(500).json({error: e.message || 'Internal server error'});
 		}
 	};
-
-
-	// fetch => response ok ! email sent // flag => true
-	// verify code => response ok ! code verified // flag2 => true
-	// return (flag != true? forget : flag2 != true verify code : reset password == > stg unique 3shan awsl ll user w y3ml reset ll password)
 
 	static forgetPassword = async (req, res) => {
 		try {
@@ -83,17 +93,19 @@ export class AuthController {
 
 		console.log('resetCode', resetCode);
 
+		let admin;
+		let user;
 		if (!resetCode) return res.status(400).json({message: 'Reset code is required'});
 
 		let userId;
 		try {
-			const user = await prisma.user.findUnique({
+			user = await prisma.user.findUnique({
 				where: {
 					email,
 				},
 			});
 			if (!user) {
-				const admin = await prisma.admin.findUnique({
+				admin = await prisma.admin.findUnique({
 					where: {
 						email,
 					},
@@ -125,12 +137,15 @@ export class AuthController {
 		if (req.body.password !== req.body.confirmPassword) return res.status(400).json({message: 'Passwords do not match'});
 		try {
 			const user = await userDao.getUserById(userId);
+			let admin;
 			if (!user) {
-				let admin = await adminDao.findAdminById(userId);
+				admin = await adminDao.getAdminById(userId);
 				if (!admin) return res.status(404).json({message: 'User not found'});
 			}
 			if (user) {
 				const hashed = await hashPassword(req.body.password);
+				console.log('body pass ', req.body.password)
+				console.log('hashed ', hashed)
 				const updatedUser = await userDao.updateUser({
 					id: userId,
 					password: hashed,
@@ -189,4 +204,18 @@ export class AuthController {
 			return res.status(500).json({error: e.message || 'Internal server error'});
 		}
 	};
+
+	static logout = async (req, res) => {
+	    try {
+	      await prisma.refreshToken.deleteMany({
+	        where: {
+	          userId: req.user.id,
+	        },
+	      });
+	      return res.status(200).json({ message: 'User logged out successfully' });
+	    } catch (e) {
+	      console.error(e);
+	      return res.status(500).json({ error: e.message || 'Internal server error' });
+	    }
+	  };
 }

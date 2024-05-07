@@ -17,10 +17,10 @@ export class homeSlidersValidate {
         const schema = Joi.object({
             id: Joi.string().required(),
             adminId: Joi.string().required(),
-            photo: Joi.string(),
-            header: Joi.string(),
-            paragraph: Joi.string(),
-            isDeleted : Joi.boolean(),
+            photo: Joi.string().optional(),
+            header: Joi.string().optional(),
+            paragraph: Joi.string().optional(),
+            isDeleted : Joi.boolean().default(false),
         });
         return schema.validateAsync(sliderDto);
     }
