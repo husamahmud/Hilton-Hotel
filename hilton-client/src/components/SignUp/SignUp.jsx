@@ -29,7 +29,9 @@ export function SignUp() {
 
     const res = await fetch(url, options);
     const user = await res.json();
-    if (res.status === 200) navigate("/");
+    if (res.status === 200) {
+      navigate("/auth/login");
+    };
     console.log(user);
 
     if (res.status === 500) {
