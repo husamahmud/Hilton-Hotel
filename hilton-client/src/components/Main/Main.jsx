@@ -4,16 +4,16 @@ import Aside from "../Aside/Aside";
 import Home from "../Home/Home";
 import About from "../About/About";
 import Footer from "../Footer/Footer";
-import {Login} from "../Login/Login";
-import {SignUp} from "../SignUp/SignUp";
+// import {Login} from "../Login/Login";
+// import {SignUp} from "../SignUp/SignUp";
 
 import "./Main.css";
 
 const links = [
   {path: "/", title: "Home", component: Home},
   {path: "/about", title: "About", component: About},
-  {path: "/auth/login", title: "Login", component: Login},
-  {path: "/auth/register", title: "Signup", component: SignUp},
+  // {path: "/auth/login", title: "Login", component: Login},
+  // {path: "/auth/register", title: "Signup", component: SignUp},
   // {path: "/rooms", title: "Rooms & Suites", component: "Rooms"},
   // {path: "/restaurant", title: "Restaurant", component: "Restaurant"},
   // {path: "/spa", title: "Spa Center", component: "Spa"},

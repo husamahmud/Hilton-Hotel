@@ -28,6 +28,46 @@ export default function Aside({links, isOpen}) {
 							</button>
 						</li>
 					))}
+					{!localStorage.getItem("token") ? (
+						<div>						<li>
+							<button onClick={() => navigate("/auth/login")}>
+								Login
+							</button>
+						</li>
+						<li>
+							<button onClick={() => navigate("/auth/register")}>
+								SignUp
+							</button>
+						</li>
+						</div>
+
+					) :
+						JSON.parse(localStorage.getItem("user")).role === "ADMIN" ? (
+							<div>
+							<li>
+								<button onClick={() => navigate("/dashboard")}>
+									Admin Dashboard
+								</button>
+							</li>
+							<li>
+								<button onClick={() =>  {
+									localStorage.removeItem("token");
+									localStorage.removeItem("user");
+									navigate("/")
+								}}>
+									Logout
+								</button>
+
+							</li>
+							</div>
+						) : (
+							<li>
+								<button onClick={() => navigate("/profile")}>
+									Profile
+								</button>
+							</li>
+						)}
+
 				</ul>
 			</nav>
 

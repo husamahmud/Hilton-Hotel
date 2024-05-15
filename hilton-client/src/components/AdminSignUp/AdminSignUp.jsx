@@ -59,6 +59,7 @@ export function AdminSignUp() {
   };
 
   return (
+    <div className="wrapper">
     <div className="signup">
       <div className="title">
         <h2>Sign Up</h2>
@@ -204,6 +205,7 @@ export function AdminSignUp() {
           </Link>
         </div>
       </form>
+    </div>
     </div>
   );
 }

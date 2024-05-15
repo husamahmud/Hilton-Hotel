@@ -234,7 +234,7 @@ export default function About() {
             <div className="overflow-hidden rounded-md teamImg">
               <div>
                 <img src="husam.jpg"
-                     alt="" />
+alt="" />
               </div>
               <div className="text-center bg-[#2b2b2b] py-5 relative teamImg transition-transform">
                 <p className="gilda text-xl tracking-wider mb-2">

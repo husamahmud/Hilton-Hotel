@@ -12,7 +12,8 @@ export function GeneralSettings() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
-    const adminId = JSON.parse(user).id;
+    const adminId = user && JSON.parse(user).id;
+    console.log(adminId)
 
     const getAllSettings = async () => {
       const url = "http://localhost:3000/api/v1/settings";
@@ -47,8 +48,9 @@ export function GeneralSettings() {
     console.log(data);
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
-    const adminId = JSON.parse(user).id;
-
+    const adminId = user && JSON.parse(user).id;
+    console.log(adminId)
+    
     console.log(data.socialMedia)
     const url = `http://localhost:3000/api/v1/settings/`;
 
