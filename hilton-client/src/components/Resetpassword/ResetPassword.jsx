@@ -32,11 +32,12 @@ export function ResetPassword() {
 		const res = await fetch(url, options);
 		const user = await res.json();
 		console.log(user);
-		if (res.status === 200) navigate('/')
+		if (res.status === 200) navigate('/auth/login')
 	};
 
 	return (
-		<div className="login">
+		<div className='wrapper'>
+		  <div className="login">
 			<div className="title">
 				<h2>Reset!</h2>
 				<p>please enter your new password</p>
@@ -65,6 +66,7 @@ export function ResetPassword() {
 
 				<button type="submit">Reset</button>
 			</form>
+		</div>
 		</div>
 	)
 }
